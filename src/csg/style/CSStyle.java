@@ -5,10 +5,27 @@
  */
 package csg.style;
 
+import djf.AppTemplate;
+import djf.components.AppStyleComponent;
+
 /**
  *
  * @author tyx
  */
-public class CSStyle {
+public class CSStyle extends AppStyleComponent {
+    private AppTemplate app;
     
+    public CSStyle(AppTemplate initApp) {
+        // KEEP THIS FOR LATER
+        app = initApp;
+
+        // LET'S USE THE DEFAULT STYLESHEET SETUP
+        super.initStylesheet(app);
+
+        // INIT THE STYLE FOR THE FILE TOOLBAR
+        app.getGUI().initFileToolbarStyle();
+
+        // AND NOW OUR WORKSPACE STYLE
+        //initTAWorkspaceStyle();
+    }
 }

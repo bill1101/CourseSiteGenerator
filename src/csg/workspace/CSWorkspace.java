@@ -5,10 +5,27 @@
  */
 package csg.workspace;
 
+import csg.CSGeneratorApp;
+import djf.components.AppDataComponent;
+import djf.components.AppWorkspaceComponent;
+
 /**
  *
  * @author tyx
  */
-public class CSWorkspace {
+public class CSWorkspace extends AppWorkspaceComponent{
+    public CSWorkspace(CSGeneratorApp initApp) {
+        
+    }
+    
+    @Override
+    public void resetWorkspace() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reloadWorkspace(AppDataComponent dataComponent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

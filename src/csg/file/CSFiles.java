@@ -5,10 +5,39 @@
  */
 package csg.file;
 
+import csg.CSGeneratorApp;
+import djf.components.AppDataComponent;
+import djf.components.AppFileComponent;
+import java.io.IOException;
+
 /**
  *
  * @author tyx
  */
-public class CSFiles {
+public class CSFiles implements AppFileComponent {
+    CSGeneratorApp app;
     
+    public CSFiles(CSGeneratorApp initApp) {
+        app = initApp;
+    }
+
+    @Override
+    public void saveData(AppDataComponent data, String filePath) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void loadData(AppDataComponent data, String filePath) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void exportData(AppDataComponent data, String filePath) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void importData(AppDataComponent data, String filePath) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
