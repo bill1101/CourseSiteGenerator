@@ -22,12 +22,23 @@ import properties_manager.PropertiesManager;
  */
 public class CSData implements AppDataComponent{
     CSGeneratorApp app;
-    ///////////////////////////////////////////////////////////////////Course Site tab
+    ///////////////////////////////////////////////////////////////////Course Site tab    
+    String subject;
+    String number;
+    String semester;
+    String year;
+    String instructorName;
+    String instructorHome;
+    String exportDir;
+    
+    String templateDir;
     ObservableList<SitePage> sitePages;
     
-    
+    String bannerSchoolImage;
+    String leftFooterImage;
+    String rightFooterImage;
+    String styleSheet;
     ///////////////////////////////////////////////////////////////////TA tab
-    // NOTE THAT THIS DATA STRUCTURE WILL DIRECTLY STORE THE
     // DATA IN THE ROWS OF THE TABLE VIEW
     ObservableList<TeachingAssistant> teachingAssistants;
     
@@ -58,6 +69,8 @@ public class CSData implements AppDataComponent{
     ObservableList<Recitation> recitations;
     
     ///////////////////////////////////////////////////////////////////Schedule tab
+    StringProperty startingMonday;
+    StringProperty endingFriday;
     ObservableList<ScheduleItem> scheduleItems;
     
     ///////////////////////////////////////////////////////////////////Project tab
@@ -78,12 +91,14 @@ public class CSData implements AppDataComponent{
         //THIS WILL STORE OUR OFFICE HOURS
         officeHours = new HashMap();
         // THESE ARE THE LANGUAGE-DEPENDENT OFFICE HOURS GRID HEADERS
+        /*
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         ArrayList<String> timeHeaders = props.getPropertyOptionsList(TAManagerProp.OFFICE_HOURS_TABLE_HEADERS);
         ArrayList<String> dowHeaders = props.getPropertyOptionsList(TAManagerProp.DAYS_OF_WEEK);
         gridHeaders = new ArrayList();
         gridHeaders.addAll(timeHeaders);
         gridHeaders.addAll(dowHeaders);
+        */
     }
 
     @Override

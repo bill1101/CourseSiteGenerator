@@ -5,10 +5,67 @@
  */
 package csg.data;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  *
  * @author tyx
  */
-public class ScheduleItem {
+public class ScheduleItem<E extends Comparable<E>> implements Comparable<E> {
     
+    private final StringProperty type;
+    private final StringProperty date;
+    private final StringProperty title;
+    private final StringProperty topic;
+
+    public ScheduleItem(String type, String date, String title, String topic) {
+        this.type = new SimpleStringProperty(type);
+        this.date = new SimpleStringProperty(date);
+        this.title = new SimpleStringProperty(title);
+        this.topic = new SimpleStringProperty(topic);
+    }
+
+    public String getType() {
+        return type.get();
+    }
+
+    public void setType(String type) {
+        this.type.set(type);
+    }
+    
+    public String getDate() {
+        return date.get();
+    }
+    
+    public void setDate(String date) {
+        this.date.set(date);
+    }
+    
+    public String getTitle() {
+        return title.get();
+    }
+
+    public void setTitle(String title) {
+        this.title.set(title);
+    }
+    
+    public String getTopic() {
+        return topic.get();
+    }
+    
+    public void setTopic(String topic) {
+        this.topic.set(topic);
+    }
+    
+    @Override
+    public int compareTo(E otherDate) {
+        return this.getDate().compareTo(((ScheduleItem)otherDate).getDate());
+    }
+
+    @Override
+    public String toString() {
+        return date.getValue();
+    }
+          
 }
