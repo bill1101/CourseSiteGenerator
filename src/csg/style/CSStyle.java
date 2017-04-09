@@ -16,6 +16,7 @@ public class CSStyle extends AppStyleComponent {
     private AppTemplate app;
     
     public CSStyle(AppTemplate initApp) {
+        
         // KEEP THIS FOR LATER
         app = initApp;
 
@@ -24,7 +25,6 @@ public class CSStyle extends AppStyleComponent {
 
         // INIT THE STYLE FOR THE FILE TOOLBAR
         app.getGUI().initFileToolbarStyle();
-
         // AND NOW OUR WORKSPACE STYLE
         //initTAWorkspaceStyle();
     }

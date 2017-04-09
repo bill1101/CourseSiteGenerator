@@ -17,7 +17,7 @@ public class CSGeneratorApp extends AppTemplate{
     @Override
     public void buildAppComponentsHook() {
         dataComponent = new CSData(this);
-        workspaceComponent = new CSWorkspace(this);
+        workspaceComponent = new CSWorkspace(this);       
         fileComponent = new CSFiles(this);
         styleComponent = new CSStyle(this);
     }
