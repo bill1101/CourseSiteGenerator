@@ -69,6 +69,8 @@ public enum CSGeneratorProp {
        
     
     TAS_HEADER_TEXT,
+    REMOVE_TA_TEXT,
+    UNDERGRAD_COLUMN_TEXT,
     NAME_COLUMN_TEXT,
     EMAIL_COLUMN_TEXT,
     NAME_PROMPT_TEXT,

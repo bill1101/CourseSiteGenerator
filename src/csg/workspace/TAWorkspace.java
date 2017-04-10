@@ -11,6 +11,7 @@ import static csg.CSGeneratorProp.START_END_TIME_INVALID_MESSAGE;
 import static csg.CSGeneratorProp.START_END_TIME_INVALID_TITLE;
 import csg.data.CSData;
 import csg.data.TeachingAssistant;
+import csg.style.CSStyle;
 import djf.components.AppDataComponent;
 import djf.ui.AppMessageDialogSingleton;
 import djf.ui.AppYesNoCancelDialogSingleton;
@@ -30,6 +31,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
@@ -46,6 +48,7 @@ import properties_manager.PropertiesManager;
 public class TAWorkspace {
     // THIS PROVIDES US WITH ACCESS TO THE APP COMPONENTS
     CSGeneratorApp app;
+    TAController controller;
     Tab TAData;
     // THIS PROVIDES RESPONSES TO INTERACTIONS WITH THIS WORKSPACE
     //TAController controller;
@@ -55,12 +58,13 @@ public class TAWorkspace {
     // FOR THE HEADER ON THE LEFT
     HBox tasHeaderBox;
     Label tasHeaderLabel;
-    VBox setTime;
+    Button removeTAButton;
+    HBox setTime;
     // FOR THE TA TABLE
     TableView<TeachingAssistant> taTable;
     TableColumn<TeachingAssistant, String> nameColumn;
     TableColumn<TeachingAssistant, String> emailColumn;
-
+    TableColumn<TeachingAssistant, Boolean> undergradColumn;
     // THE TA INPUT
     HBox addBox;
     TextField nameTextField;
@@ -82,12 +86,12 @@ public class TAWorkspace {
     HashMap<String, Pane> officeHoursGridTACellPanes;
     HashMap<String, Label> officeHoursGridTACellLabels;
     
+    
+    SplitPane sPane;
     String updateName;
     String updateEmail;
     boolean isAdd;
     
-    //boolean half_start;
-    //boolean half_end;
     /**
      * The contstructor initializes the user interface, except for
      * the full office hours grid, since it doesn't yet know what
@@ -108,10 +112,11 @@ public class TAWorkspace {
         
         
         // INIT THE HEADER ON THE LEFT
-        tasHeaderBox = new HBox();
+        tasHeaderBox = new HBox(20);
         String tasHeaderText = props.getProperty(CSGeneratorProp.TAS_HEADER_TEXT.toString());
         tasHeaderLabel = new Label(tasHeaderText);
-        tasHeaderBox.getChildren().add(tasHeaderLabel);
+        removeTAButton = new Button(props.getProperty(CSGeneratorProp.REMOVE_TA_TEXT.toString()));
+        tasHeaderBox.getChildren().addAll(tasHeaderLabel,removeTAButton);
 
         // MAKE THE TABLE AND SETUP THE DATA MODEL
         taTable = new TableView();
@@ -124,15 +129,19 @@ public class TAWorkspace {
         String emailColumnText = props.getProperty(CSGeneratorProp.EMAIL_COLUMN_TEXT.toString());
         nameColumn = new TableColumn(nameColumnText);    
         emailColumn = new TableColumn(emailColumnText);
+        undergradColumn = new TableColumn(props.getProperty(CSGeneratorProp.UNDERGRAD_COLUMN_TEXT.toString()));
+        //useColumn.setCellValueFactory(new PropertyValueFactory<SitePage, Boolean>("use"));
+        undergradColumn.setCellFactory(column -> new CheckBoxTableCell());     
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<TeachingAssistant, String>("name")
         );
         emailColumn.setCellValueFactory(
                 new PropertyValueFactory<TeachingAssistant, String>("email")
         );
+        taTable.getColumns().add(undergradColumn);
         taTable.getColumns().add(nameColumn);
         taTable.getColumns().add(emailColumn);
-        
+        taTable.setEditable(true);
         // ADD BOX FOR ADDING A TA
         String namePromptText = props.getProperty(CSGeneratorProp.NAME_PROMPT_TEXT.toString());
         String emailPromptText = props.getProperty(CSGeneratorProp.EMAIL_PROMPT_TEXT.toString());
@@ -143,8 +152,8 @@ public class TAWorkspace {
         emailTextField = new TextField();
         nameTextField.setPromptText(namePromptText);
         emailTextField.setPromptText(emailPromptText);
-        addButton = new Button(addButtonText);//
-        addBox = new HBox();
+        addButton = new Button(addButtonText);
+        addBox = new HBox(10);
         nameTextField.prefWidthProperty().bind(addBox.widthProperty().multiply(.3));
         emailTextField.prefWidthProperty().bind(addBox.widthProperty().multiply(.3));
         addButton.prefWidthProperty().bind(addBox.widthProperty().multiply(.2));
@@ -181,7 +190,7 @@ public class TAWorkspace {
         
         
         // INIT THE HEADER ON THE RIGHT
-        officeHoursHeaderBox = new HBox();
+        officeHoursHeaderBox = new HBox(50);
         String officeHoursGridText = props.getProperty(CSGeneratorProp.OFFICE_HOURS_SUBHEADER.toString());
         officeHoursHeaderLabel = new Label(officeHoursGridText);
         officeHoursHeaderBox.getChildren().add(officeHoursHeaderLabel);
@@ -200,15 +209,17 @@ public class TAWorkspace {
         
         
         // ORGANIZE THE LEFT AND RIGHT PANES
-        VBox leftPane = new VBox();
+        VBox leftPane = new VBox(10);
         leftPane.getChildren().add(tasHeaderBox);        
         leftPane.getChildren().add(taTable);        
         leftPane.getChildren().add(addBox);
-        VBox rightPane = new VBox();
+        VBox rightPane = new VBox(10);
         rightPane.getChildren().add(officeHoursHeaderBox);
         rightPane.getChildren().add(officeHoursGridPane);
         //time
-        setTime = new VBox();
+        setTime = new HBox();
+        setTime.setAlignment(Pos.CENTER_RIGHT);
+        officeHoursHeaderBox.getChildren().add(setTime);
         ObservableList<String> options_start = 
             FXCollections.observableArrayList(
                 "00:00am",
@@ -342,17 +353,17 @@ public class TAWorkspace {
         
         
         // BOTH PANES WILL NOW GO IN A SPLIT PANE
-        SplitPane sPane = new SplitPane(leftPane, new ScrollPane(rightPane), setTime);
-        sPane.setDividerPositions(0.3f, 0.9f);
+        sPane = new SplitPane(leftPane, new VBox(), new ScrollPane(rightPane));
+        sPane.setDividerPositions(0.3,0.31f);
         TAData.setContent(sPane);
         /*
         workspace = new BorderPane();
         
         // AND PUT EVERYTHING IN THE WORKSPACE
         ((BorderPane) workspace).setCenter(sPane);
-
+        */
         // MAKE SURE THE TABLE EXTENDS DOWN FAR ENOUGH
-        taTable.prefHeightProperty().bind(workspace.heightProperty().multiply(1.9));
+        taTable.prefHeightProperty().bind(sPane.heightProperty().multiply(1.9));
 
         // NOW LET'S SETUP THE EVENT HANDLING
         controller = new TAController(app);
@@ -366,6 +377,7 @@ public class TAWorkspace {
         });
         addButton.setOnAction(e -> {
             if(isAdd){
+                System.out.println(controller);
                 controller.handleAddTA();
             }
             else{
@@ -389,10 +401,10 @@ public class TAWorkspace {
         taTable.setOnKeyPressed(e -> {
             controller.handleKeyPress(e.getCode());
         });
-        workspace.setOnKeyPressed(e -> {
+        sPane.setOnKeyPressed(e -> {
             controller.handleKeyPress(e);
         });
-        */
+        
     }
     
     
@@ -539,7 +551,7 @@ public class TAWorkspace {
         officeHoursGridTACellPanes.clear();
         officeHoursGridTACellLabels.clear();
     }
- /*  
+  
     //@Override
     public void reloadWorkspace(AppDataComponent dataComponent) {
         CSData taData = (CSData)dataComponent;
@@ -626,11 +638,11 @@ public class TAWorkspace {
             });
         }
         
-        TAStyle taStyle = (TAStyle)app.getStyleComponent();
+        CSStyle taStyle = (CSStyle)app.getStyleComponent();
         taStyle.initOfficeHoursGridStyle();
     }
     
-    public void reloadOfficeHoursGrid(TAData dataComponent) {        
+    public void reloadOfficeHoursGrid(CSData dataComponent) {        
         ArrayList<String> gridHeaders = dataComponent.getGridHeaders();
 
         // ADD THE TIME HEADERS
@@ -692,11 +704,11 @@ public class TAWorkspace {
         }
         
         // AND MAKE SURE ALL THE COMPONENTS HAVE THE PROPER STYLE
-        TAStyle taStyle = (TAStyle)app.getStyleComponent();
+        CSStyle taStyle = (CSStyle)app.getStyleComponent();
         taStyle.initOfficeHoursGridStyle();
     }
     
-    public void reloadOfficeHoursGrid3(TAData dataComponent,HashMap<String, String> officeHoursGridTACellLabelsTemp) {        
+    public void reloadOfficeHoursGrid3(CSData dataComponent,HashMap<String, String> officeHoursGridTACellLabelsTemp) {        
         resetWorkspace();
         ArrayList<String> gridHeaders = dataComponent.getGridHeaders();
 
@@ -766,11 +778,11 @@ public class TAWorkspace {
         }
         
         // AND MAKE SURE ALL THE COMPONENTS HAVE THE PROPER STYLE
-        TAStyle taStyle = (TAStyle)app.getStyleComponent();
+        CSStyle taStyle = (CSStyle)app.getStyleComponent();
         taStyle.initOfficeHoursGridStyle();
     }
     
-    public void addCellToGrid(TAData dataComponent, HashMap<String, Pane> panes, HashMap<String, Label> labels, int col, int row) {       
+    public void addCellToGrid(CSData dataComponent, HashMap<String, Pane> panes, HashMap<String, Label> labels, int col, int row) {       
         // MAKE THE LABEL IN A PANE
         Label cellLabel = new Label("");
         HBox cellPane = new HBox();
@@ -803,7 +815,7 @@ public class TAWorkspace {
 	
         // PROMPT THE USER TO SAVE UNSAVED WORK
 	AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
-        yesNoDialog.show(props.getProperty(CHANGE_TIME_WARNING_TITLE), props.getProperty(CHANGE_TIME_WARNING_MESSAGE));
+        yesNoDialog.show(props.getProperty(CSGeneratorProp.CHANGE_TIME_WARNING_TITLE), props.getProperty(CSGeneratorProp.CHANGE_TIME_WARNING_MESSAGE));
         
         // AND NOW GET THE USER'S SELECTION
         String selection = yesNoDialog.getSelection();
@@ -846,7 +858,7 @@ public class TAWorkspace {
 
     private boolean checkEndTime(int oldHour, int newHour) {
         int diff = oldHour - newHour;
-        TAData taData = (TAData)app.getDataComponent();
+        CSData taData = (CSData)app.getDataComponent();
         //System.out.println(oldHour);
         //System.out.println(taData.getStartHour());
         if(diff>0){
@@ -869,5 +881,117 @@ public class TAWorkspace {
         return false;
     }
 
-*/
+    public CSGeneratorApp getApp() {
+        return app;
+    }
+
+    public void setApp(CSGeneratorApp app) {
+        this.app = app;
+    }
+
+    public TAController getController() {
+        return controller;
+    }
+
+    public void setController(TAController controller) {
+        this.controller = controller;
+    }
+
+    public HBox getTasHeaderBox() {
+        return tasHeaderBox;
+    }
+
+    public void setTasHeaderBox(HBox tasHeaderBox) {
+        this.tasHeaderBox = tasHeaderBox;
+    }
+
+    public Label getTasHeaderLabel() {
+        return tasHeaderLabel;
+    }
+
+    public void setTasHeaderLabel(Label tasHeaderLabel) {
+        this.tasHeaderLabel = tasHeaderLabel;
+    }
+
+    public HBox getSetTime() {
+        return setTime;
+    }
+
+    public void setSetTime(HBox setTime) {
+        this.setTime = setTime;
+    }
+
+    public TableView<TeachingAssistant> getTaTable() {
+        return taTable;
+    }
+
+    public void setTaTable(TableView<TeachingAssistant> taTable) {
+        this.taTable = taTable;
+    }
+
+    public TableColumn<TeachingAssistant, String> getNameColumn() {
+        return nameColumn;
+    }
+
+    public void setNameColumn(TableColumn<TeachingAssistant, String> nameColumn) {
+        this.nameColumn = nameColumn;
+    }
+
+    public TableColumn<TeachingAssistant, String> getEmailColumn() {
+        return emailColumn;
+    }
+
+    public void setEmailColumn(TableColumn<TeachingAssistant, String> emailColumn) {
+        this.emailColumn = emailColumn;
+    }
+
+    public HBox getOfficeHoursHeaderBox() {
+        return officeHoursHeaderBox;
+    }
+
+    public void setOfficeHoursHeaderBox(HBox officeHoursHeaderBox) {
+        this.officeHoursHeaderBox = officeHoursHeaderBox;
+    }
+
+    public Label getOfficeHoursHeaderLabel() {
+        return officeHoursHeaderLabel;
+    }
+
+    public void setOfficeHoursHeaderLabel(Label officeHoursHeaderLabel) {
+        this.officeHoursHeaderLabel = officeHoursHeaderLabel;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
+    public String getUpdateEmail() {
+        return updateEmail;
+    }
+
+    public void setUpdateEmail(String updateEmail) {
+        this.updateEmail = updateEmail;
+    }
+
+    public boolean isIsAdd() {
+        return isAdd;
+    }
+
+    public void setIsAdd(boolean isAdd) {
+        this.isAdd = isAdd;
+    }
+
+    public SplitPane getsPane() {
+        return sPane;
+    }
+
+    public Button getRemoveTAButton() {
+        return removeTAButton;
+    }
+
+
 }

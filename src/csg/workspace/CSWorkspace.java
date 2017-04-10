@@ -31,26 +31,67 @@ public class CSWorkspace extends AppWorkspaceComponent{
     Tab scheduleData;
     Tab projectData;
     
+    TAWorkspace TAworkspaceComponent;
+    CourseDetailsWorkspace courseDetailsWorkspaceComponent;
+    RecitationWorkspace recitationWorkspaceComponent;
+    ScheduleWorkspace scheduleWorkspaceComponent;
+    ProjectsWorkspace projectWorkspaceComponent;
     public CSWorkspace(CSGeneratorApp initApp) {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         tabPane = new TabPane();
         app = initApp;
         
-        courseDetailsTab = new CourseDetailsWorkspace(initApp).getCourseDetailsTab();
+        courseDetailsWorkspaceComponent = new CourseDetailsWorkspace(initApp);
+        courseDetailsTab = courseDetailsWorkspaceComponent.getCourseDetailsTab();
               
-        /////////
-        TAData = new TAWorkspace(initApp).getTAData();     
+        TAworkspaceComponent = new TAWorkspace(initApp);
+        TAData = TAworkspaceComponent.getTAData();     
         
-        recitationData = new RecitationWorkspace(initApp).getRecitationTab();
-               
-        scheduleData = new ScheduleWorkspace(initApp).getScheduleTab();
-              
-        projectData = new ProjectsWorkspace(initApp).getProjectsTab();
+        recitationWorkspaceComponent = new RecitationWorkspace(initApp);
+        recitationData = recitationWorkspaceComponent.getRecitationTab();
+        
+        scheduleWorkspaceComponent = new ScheduleWorkspace(initApp);
+        scheduleData = scheduleWorkspaceComponent.getScheduleTab();
+             
+        projectWorkspaceComponent = new ProjectsWorkspace(initApp);
+        projectData = projectWorkspaceComponent.getProjectsTab();
            
         tabPane.getTabs().addAll(courseDetailsTab,TAData,recitationData,scheduleData,projectData);      
         workspace = new BorderPane();       
         // AND PUT EVERYTHING IN THE WORKSPACE
         ((BorderPane) workspace).setCenter(tabPane);
+    }
+
+    public TabPane getTabPane() {
+        return tabPane;
+    }
+
+    public Tab getCourseDetailsTab() {
+        return courseDetailsTab;
+    }
+
+    public ScheduleWorkspace getScheduleWorkspaceComponent() {
+        return scheduleWorkspaceComponent;
+    }
+
+    public ProjectsWorkspace getProjectWorkspaceComponent() {
+        return projectWorkspaceComponent;
+    }
+
+    public CourseDetailsWorkspace getCourseDetailsWorkspaceComponent() {
+        return courseDetailsWorkspaceComponent;
+    }
+
+    public RecitationWorkspace getRecitationWorkspaceComponent() {
+        return recitationWorkspaceComponent;
+    }
+
+    public Tab getTAData() {
+        return TAData;
+    }
+    
+    public TAWorkspace getTAworkspaceComponent() {
+        return TAworkspaceComponent;
     }
     
     @Override

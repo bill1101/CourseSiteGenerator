@@ -102,13 +102,14 @@
         <property name="TAS_HEADER_TEXT"                value="Teaching Assistants"></property>
         <property name="NAME_COLUMN_TEXT"               value="Name"></property>
         <property name="EMAIL_COLUMN_TEXT"              value="Email"></property>
+        <property name="UNDERGRAD_COLUMN_TEXT"          value="Undergrad"></property>
         <property name="NAME_PROMPT_TEXT"               value="Name"></property>
         <property name="EMAIL_PROMPT_TEXT"              value="Email"></property>
         <property name="ADD_BUTTON_TEXT"                value="Add TA"></property>
         <property name="CLEAR_BUTTON_TEXT"              value="Clear"></property>
         <property name="UPDATE_BUTTON_TEXT"             value="Update"></property>
         <property name="OFFICE_HOURS_SUBHEADER"         value="Office Hours Grid"></property>
-        
+        <property name="REMOVE_TA_TEXT"                 value="-"></property>
         <property name="RECITATION_HEADER_TEXT"         value="Recitations"></property>
         <property name="RECITATION_DELETE_BUTTON_TEXT"  value="-"></property>
         <property name="SECTION_COLUMN_TEXT"            value="Section"></property>

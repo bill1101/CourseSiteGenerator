@@ -93,7 +93,7 @@ public class ProjectsWorkspace {
         
         teamsHeaderLabel = new Label(props.getProperty(CSGeneratorProp.TEAMS_HEADER_LABEL.toString()));
         removeTeamsButton = new Button(props.getProperty(CSGeneratorProp.REMOVE_TEAMS_BUTTON_TEXT.toString()));
-        teamsHeaderPane = new HBox();
+        teamsHeaderPane = new HBox(20);
         teamsHeaderPane.getChildren().addAll(teamsHeaderLabel,removeTeamsButton);
         teamsTable = new TableView<>();
         CSData data = (CSData) app.getDataComponent();
@@ -111,11 +111,13 @@ public class ProjectsWorkspace {
         teamsTable.getColumns().add(colorColumn);
         teamsTable.getColumns().add(textColorColumn);
         teamsTable.getColumns().add(linkColumn);
+        teamsTable.setMaxHeight(150);
         teamsAddEditHeader = new Label(props.getProperty(CSGeneratorProp.TEAMS_ADD_EDIT_HEADER.toString()));
         nameLabel = new Label(props.getProperty(CSGeneratorProp.NAME_TEXT.toString()));
         nameTextField = new TextField();
         colorLabel = new Label(props.getProperty(CSGeneratorProp.COLOR_TEXT.toString()));
         colorPicker = new ColorPicker();
+        colorPicker.setMinHeight(25);
         textColorPickerLabel = new Label(props.getProperty(CSGeneratorProp.TEXT_COLOR_TEXT.toString()));
         textColorPicker = new ColorPicker();
         linkLabel = new Label(props.getProperty(CSGeneratorProp.TEAM_LINK_TEXT.toString()));
@@ -131,17 +133,18 @@ public class ProjectsWorkspace {
         teamsAddEditPane.add(textColorPickerLabel, 2, 2);
         teamsAddEditPane.add(textColorPicker, 3, 2);
         teamsAddEditPane.add(linkLabel, 0, 3);
-        teamsAddEditPane.add(linkTextField, 1, 3);
+        teamsAddEditPane.add(linkTextField, 1, 3, 3, 1);
         teamsAddEditPane.add(teamsAddEditButton, 0, 4);
         teamsAddEditPane.add(teamsClearButton, 1, 4);
-        teamsPane = new VBox();
+        teamsPane = new VBox(8);
         teamsPane.getChildren().addAll(teamsHeaderPane,teamsTable,teamsAddEditPane);
 
         studentsHeaderLabel = new Label(props.getProperty(CSGeneratorProp.STUDENTS_HEADER.toString()));
         removeStudentsButton = new Button(props.getProperty(CSGeneratorProp.REMOVE_STUDENTS_BUTTON_TEXT.toString()));
-        studentsHeaderPane = new HBox();
+        studentsHeaderPane = new HBox(20);
         studentsHeaderPane.getChildren().addAll(studentsHeaderLabel,removeStudentsButton);
         studentsTable = new TableView();
+        studentsTable.setMaxHeight(150);
         ObservableList<Student> tableData1 = data.getStudents();
         studentsTable.setItems(tableData1);
         firstNameColumn = new TableColumn(props.getProperty(CSGeneratorProp.FIRSTNAME_COLUMN_TEXT.toString()));
@@ -180,11 +183,11 @@ public class ProjectsWorkspace {
         studentsAddEditPane.add(roleTextField, 1, 4);
         studentsAddEditPane.add(studentsAddEditButton, 0, 5);
         studentsAddEditPane.add(studentsClear, 1, 5);
-        studentsPane = new VBox();
-        studentsPane.getChildren().addAll(studentsHeaderPane, studentsTable);
+        studentsPane = new VBox(8);
+        studentsPane.getChildren().addAll(studentsHeaderPane, studentsTable,studentsAddEditPane);
         
         projectsContent = new VBox(20);
-        projectsContent.getChildren().addAll(projectsHeader, teamsPane, studentsPane, studentsAddEditPane);
+        projectsContent.getChildren().addAll(projectsHeader, teamsPane, studentsPane);
         projectsContent.setStyle("-fx-padding: 20;");
         projectsTab.setContent(projectsContent);
     }
@@ -192,6 +195,368 @@ public class ProjectsWorkspace {
     public Tab getProjectsTab() {
         return projectsTab;
     }
+
+    public CSGeneratorApp getApp() {
+        return app;
+    }
+
+    public void setApp(CSGeneratorApp app) {
+        this.app = app;
+    }
+
+    public Label getProjectsHeader() {
+        return projectsHeader;
+    }
+
+    public void setProjectsHeader(Label projectsHeader) {
+        this.projectsHeader = projectsHeader;
+    }
+
+    public VBox getTeamsPane() {
+        return teamsPane;
+    }
+
+    public void setTeamsPane(VBox teamsPane) {
+        this.teamsPane = teamsPane;
+    }
+
+    public HBox getTeamsHeaderPane() {
+        return teamsHeaderPane;
+    }
+
+    public void setTeamsHeaderPane(HBox teamsHeaderPane) {
+        this.teamsHeaderPane = teamsHeaderPane;
+    }
+
+    public Label getTeamsHeaderLabel() {
+        return teamsHeaderLabel;
+    }
+
+    public void setTeamsHeaderLabel(Label teamsHeaderLabel) {
+        this.teamsHeaderLabel = teamsHeaderLabel;
+    }
+
+    public Button getRemoveTeamsButton() {
+        return removeTeamsButton;
+    }
+
+    public void setRemoveTeamsButton(Button removeTeamsButton) {
+        this.removeTeamsButton = removeTeamsButton;
+    }
+
+    public TableView<Team> getTeamsTable() {
+        return teamsTable;
+    }
+
+    public void setTeamsTable(TableView<Team> teamsTable) {
+        this.teamsTable = teamsTable;
+    }
+
+    public TableColumn<Team, String> getNameColumn() {
+        return nameColumn;
+    }
+
+    public void setNameColumn(TableColumn<Team, String> nameColumn) {
+        this.nameColumn = nameColumn;
+    }
+
+    public TableColumn<Team, String> getColorColumn() {
+        return colorColumn;
+    }
+
+    public void setColorColumn(TableColumn<Team, String> colorColumn) {
+        this.colorColumn = colorColumn;
+    }
+
+    public TableColumn<Team, String> getTextColorColumn() {
+        return textColorColumn;
+    }
+
+    public void setTextColorColumn(TableColumn<Team, String> textColorColumn) {
+        this.textColorColumn = textColorColumn;
+    }
+
+    public TableColumn<Team, String> getLinkColumn() {
+        return linkColumn;
+    }
+
+    public void setLinkColumn(TableColumn<Team, String> linkColumn) {
+        this.linkColumn = linkColumn;
+    }
+
+    public GridPane getTeamsAddEditPane() {
+        return teamsAddEditPane;
+    }
+
+    public void setTeamsAddEditPane(GridPane teamsAddEditPane) {
+        this.teamsAddEditPane = teamsAddEditPane;
+    }
+
+    public Label getTeamsAddEditHeader() {
+        return teamsAddEditHeader;
+    }
+
+    public void setTeamsAddEditHeader(Label teamsAddEditHeader) {
+        this.teamsAddEditHeader = teamsAddEditHeader;
+    }
+
+    public Label getNameLabel() {
+        return nameLabel;
+    }
+
+    public void setNameLabel(Label nameLabel) {
+        this.nameLabel = nameLabel;
+    }
+
+    public TextField getNameTextField() {
+        return nameTextField;
+    }
+
+    public void setNameTextField(TextField nameTextField) {
+        this.nameTextField = nameTextField;
+    }
+
+    public Label getColorLabel() {
+        return colorLabel;
+    }
+
+    public void setColorLabel(Label colorLabel) {
+        this.colorLabel = colorLabel;
+    }
+
+    public ColorPicker getColorPicker() {
+        return colorPicker;
+    }
+
+    public void setColorPicker(ColorPicker colorPicker) {
+        this.colorPicker = colorPicker;
+    }
+
+    public Label getTextColorPickerLabel() {
+        return textColorPickerLabel;
+    }
+
+    public void setTextColorPickerLabel(Label textColorPickerLabel) {
+        this.textColorPickerLabel = textColorPickerLabel;
+    }
+
+    public ColorPicker getTextColorPicker() {
+        return textColorPicker;
+    }
+
+    public void setTextColorPicker(ColorPicker textColorPicker) {
+        this.textColorPicker = textColorPicker;
+    }
+
+    public Label getLinkLabel() {
+        return linkLabel;
+    }
+
+    public void setLinkLabel(Label linkLabel) {
+        this.linkLabel = linkLabel;
+    }
+
+    public TextField getLinkTextField() {
+        return linkTextField;
+    }
+
+    public void setLinkTextField(TextField linkTextField) {
+        this.linkTextField = linkTextField;
+    }
+
+    public Button getTeamsAddEditButton() {
+        return teamsAddEditButton;
+    }
+
+    public void setTeamsAddEditButton(Button teamsAddEditButton) {
+        this.teamsAddEditButton = teamsAddEditButton;
+    }
+
+    public Button getTeamsClearButton() {
+        return teamsClearButton;
+    }
+
+    public void setTeamsClearButton(Button teamsClearButton) {
+        this.teamsClearButton = teamsClearButton;
+    }
+
+    public VBox getStudentsPane() {
+        return studentsPane;
+    }
+
+    public void setStudentsPane(VBox studentsPane) {
+        this.studentsPane = studentsPane;
+    }
+
+    public HBox getStudentsHeaderPane() {
+        return studentsHeaderPane;
+    }
+
+    public void setStudentsHeaderPane(HBox studentsHeaderPane) {
+        this.studentsHeaderPane = studentsHeaderPane;
+    }
+
+    public Label getStudentsHeaderLabel() {
+        return studentsHeaderLabel;
+    }
+
+    public void setStudentsHeaderLabel(Label studentsHeaderLabel) {
+        this.studentsHeaderLabel = studentsHeaderLabel;
+    }
+
+    public Button getRemoveStudentsButton() {
+        return removeStudentsButton;
+    }
+
+    public void setRemoveStudentsButton(Button removeStudentsButton) {
+        this.removeStudentsButton = removeStudentsButton;
+    }
+
+    public TableView<Student> getStudentsTable() {
+        return studentsTable;
+    }
+
+    public void setStudentsTable(TableView<Student> studentsTable) {
+        this.studentsTable = studentsTable;
+    }
+
+    public TableColumn<Student, String> getFirstNameColumn() {
+        return firstNameColumn;
+    }
+
+    public void setFirstNameColumn(TableColumn<Student, String> firstNameColumn) {
+        this.firstNameColumn = firstNameColumn;
+    }
+
+    public TableColumn<Student, String> getLastNameColumn() {
+        return lastNameColumn;
+    }
+
+    public void setLastNameColumn(TableColumn<Student, String> lastNameColumn) {
+        this.lastNameColumn = lastNameColumn;
+    }
+
+    public TableColumn<Student, String> getTeamColumn() {
+        return teamColumn;
+    }
+
+    public void setTeamColumn(TableColumn<Student, String> teamColumn) {
+        this.teamColumn = teamColumn;
+    }
+
+    public TableColumn<Student, String> getRoleColumn() {
+        return roleColumn;
+    }
+
+    public void setRoleColumn(TableColumn<Student, String> roleColumn) {
+        this.roleColumn = roleColumn;
+    }
+
+    public GridPane getStudentsAddEditPane() {
+        return studentsAddEditPane;
+    }
+
+    public void setStudentsAddEditPane(GridPane studentsAddEditPane) {
+        this.studentsAddEditPane = studentsAddEditPane;
+    }
+
+    public Label getStudentsAddEditHeader() {
+        return studentsAddEditHeader;
+    }
+
+    public void setStudentsAddEditHeader(Label studentsAddEditHeader) {
+        this.studentsAddEditHeader = studentsAddEditHeader;
+    }
+
+    public Label getFirstNameLabel() {
+        return firstNameLabel;
+    }
+
+    public void setFirstNameLabel(Label firstNameLabel) {
+        this.firstNameLabel = firstNameLabel;
+    }
+
+    public TextField getFirstNameTextField() {
+        return firstNameTextField;
+    }
+
+    public void setFirstNameTextField(TextField firstNameTextField) {
+        this.firstNameTextField = firstNameTextField;
+    }
+
+    public Label getLastNameLabel() {
+        return lastNameLabel;
+    }
+
+    public void setLastNameLabel(Label lastNameLabel) {
+        this.lastNameLabel = lastNameLabel;
+    }
+
+    public TextField getLastNameTextField() {
+        return lastNameTextField;
+    }
+
+    public void setLastNameTextField(TextField lastNameTextField) {
+        this.lastNameTextField = lastNameTextField;
+    }
+
+    public Label getTeamLabel() {
+        return teamLabel;
+    }
+
+    public void setTeamLabel(Label teamLabel) {
+        this.teamLabel = teamLabel;
+    }
+
+    public ComboBox getTeamComboBox() {
+        return teamComboBox;
+    }
+
+    public void setTeamComboBox(ComboBox teamComboBox) {
+        this.teamComboBox = teamComboBox;
+    }
+
+    public Label getRoleLabel() {
+        return roleLabel;
+    }
+
+    public void setRoleLabel(Label roleLabel) {
+        this.roleLabel = roleLabel;
+    }
+
+    public TextField getRoleTextField() {
+        return roleTextField;
+    }
+
+    public void setRoleTextField(TextField roleTextField) {
+        this.roleTextField = roleTextField;
+    }
+
+    public Button getStudentsAddEditButton() {
+        return studentsAddEditButton;
+    }
+
+    public void setStudentsAddEditButton(Button studentsAddEditButton) {
+        this.studentsAddEditButton = studentsAddEditButton;
+    }
+
+    public Button getStudentsClear() {
+        return studentsClear;
+    }
+
+    public void setStudentsClear(Button studentsClear) {
+        this.studentsClear = studentsClear;
+    }
+
+    public VBox getProjectsContent() {
+        return projectsContent;
+    }
+
+    public void setProjectsContent(VBox projectsContent) {
+        this.projectsContent = projectsContent;
+    }
+    
+    
         
     
 }
