@@ -73,6 +73,7 @@ public class CSStyle extends AppStyleComponent {
     public static String CLASS_MIDIAN_INPUT = "median_input";
     public static String CLASS_LONG_INPUT = "long_input";
     public static String CLASS_TA_BACKGROUND = "ta_header_background";
+    public static String CLASS_OFFICE_HOUR_BACKGROUND = "office_hour_background";
     // THIS PROVIDES ACCESS TO OTHER COMPONENTS
     private AppTemplate app;
     
@@ -239,8 +240,9 @@ public class CSStyle extends AppStyleComponent {
     public void initOfficeHoursGridStyle() {
         // RIGHT SIDE - THE OFFICE HOURS GRID TIME HEADERS
         TAWorkspace workspaceComponent = ((CSWorkspace)app.getWorkspaceComponent()).getTAworkspaceComponent();
-        workspaceComponent.getOfficeHoursGridPane().getStyleClass().add(CLASS_CONTENT_PANE);
- 
+        workspaceComponent.getOfficeHoursGridPane().getStyleClass().add(CLASS_OFFICE_HOURS_GRID);
+        workspaceComponent.getRightPane().getStyleClass().add(CLASS_OFFICE_HOUR_BACKGROUND);
+        workspaceComponent.getOfficeHoursGridPane().getStyleClass().add(CLASS_TABLE_BACKGROUND);
         setStyleClassOnAll(workspaceComponent.getOfficeHoursGridTimeHeaderPanes(), CLASS_OFFICE_HOURS_GRID_TIME_COLUMN_HEADER_PANE);
         setStyleClassOnAll(workspaceComponent.getOfficeHoursGridTimeHeaderLabels(), CLASS_OFFICE_HOURS_GRID_TIME_COLUMN_HEADER_LABEL);
         setStyleClassOnAll(workspaceComponent.getOfficeHoursGridDayHeaderPanes(), CLASS_OFFICE_HOURS_GRID_DAY_COLUMN_HEADER_PANE);

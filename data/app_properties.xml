@@ -20,14 +20,20 @@
         <property name="SAVE_AS_ICON"        value="SaveAs.png"></property>
         <property name="EXPORT_ICON"        value="Export.png"></property>
         <property name="EXIT_ICON"          value="Exit.png"></property> 
+        <property name="UNDO_ICON"          value="undo.png"></property>
+        <property name="REDO_ICON"          value="redo.png"></property>
+        <property name="ABOUT_ICON"          value="about.png"></property> 
         
         <!-- TOOLTIPS FOR BUTTONS -->
-        <property name="NEW_TOOLTIP"		value="Build a new TA Grid"></property>
-        <property name="LOAD_TOOLTIP"		value="Load an existing TA Grid"></property>
-        <property name="SAVE_TOOLTIP"		value="Save the current TA Grid"></property>
+        <property name="NEW_TOOLTIP"		value="Build a new course site"></property>
+        <property name="LOAD_TOOLTIP"		value="Load an existing course site"></property>
+        <property name="SAVE_TOOLTIP"		value="Save the current course site"></property>
         <property name="SAVE_AS_TOOLTIP"        value="Save as"></property>
         <property name="EXPORT_TOOLTIP"         value="Export as"></property>
         <property name="EXIT_TOOLTIP"		value="Exit the Application"></property>
+        <property name="UNDO_TOOLTIP"		value="undo"></property>
+        <property name="REDO_TOOLTIP"		value="redo"></property>
+        <property name="ABOUT_TOOLTIP"		value="about"></property>
         
         <!-- ERROR MESSAGES -->
         <property name="CLOSE_BUTTON_TEXT"              value="Close"></property>
@@ -68,7 +74,7 @@
         <property name="TAB_TITLE_COURSE_DETAILS"       value="Course Details"></property>
         <property name="TAB_TITLE_TA_DATA"              value="TA Data"></property>
         <property name="TAB_TITLE_RECITATION_DATA"      value="Recitation Data"></property>
-        <property name="TAB_TITLE_SCHEDULE_DATA"        value="Scheduel Data"></property>
+        <property name="TAB_TITLE_SCHEDULE_DATA"        value="Schedule Data"></property>
         <property name="TAB_TITLE_PROJECT_DATA"         value="Project Data"></property>
         
         <property name="COURSE_INFO_HEADER_TEXT"        value="Course Info"></property>

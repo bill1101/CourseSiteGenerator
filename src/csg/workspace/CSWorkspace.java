@@ -7,6 +7,8 @@ package csg.workspace;
 
 import csg.CSGeneratorApp;
 import csg.CSGeneratorProp;
+import csg.data.CSData;
+import csg.jtps.jTPS;
 import djf.components.AppDataComponent;
 import djf.components.AppWorkspaceComponent;
 import javafx.scene.control.Tab;
@@ -20,7 +22,7 @@ import properties_manager.PropertiesManager;
  */
 public class CSWorkspace extends AppWorkspaceComponent{
     CSGeneratorApp app;
-
+    static jTPS jTPS = new jTPS();
     // THIS PROVIDES RESPONSES TO INTERACTIONS WITH THIS WORKSPACE
     CSController controller;
     
@@ -101,7 +103,8 @@ public class CSWorkspace extends AppWorkspaceComponent{
 
     @Override
     public void reloadWorkspace(AppDataComponent dataComponent) {
-        
+        CSData csData = (CSData)dataComponent;
+        TAworkspaceComponent.reloadOfficeHoursGrid(csData);
     }
     
 }

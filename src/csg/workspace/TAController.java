@@ -40,7 +40,7 @@ import csg.workspace.TAWorkspace;
  */
 public class TAController {
     // THE APP PROVIDES ACCESS TO OTHER COMPONENTS AS NEEDED
-    static jTPS jTPS = new jTPS();
+    //static jTPS jTPS = new jTPS();
     
     CSGeneratorApp app;
     String oldName;
@@ -109,7 +109,7 @@ public class TAController {
             oldName = initName;
             newName = name;
             jTPS_Transaction editTransaction = new EditTA_Transaction(app,oldName,newName,initEmail,email);
-            jTPS.addTransaction(editTransaction);
+            CSWorkspace.jTPS.addTransaction(editTransaction);
             
             // ADD THE NEW TA TO THE DATA
             //data.editTA(initName, name, email);
@@ -172,7 +172,7 @@ public class TAController {
         }
         else {
             jTPS_Transaction addTransaction = new AddTA_Transaction(app,name,email);
-            jTPS.addTransaction(addTransaction);
+            CSWorkspace.jTPS.addTransaction(addTransaction);
             // ADD THE NEW TA TO THE DATA
             //data.addTA(name, email);
             
@@ -221,7 +221,7 @@ public class TAController {
                 CSData data = (CSData)app.getDataComponent();
                 
                 jTPS_Transaction removeTransaction = new RemoveTA_Transaction(app,taName,ta.getEmail());
-                jTPS.addTransaction(removeTransaction);
+                CSWorkspace.jTPS.addTransaction(removeTransaction);
                 //data.removeTA(taName);
                 
                 // AND BE SURE TO REMOVE ALL THE TA'S OFFICE HOURS
@@ -246,10 +246,10 @@ public class TAController {
         final KeyCombination keyCombinationZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
         final KeyCombination keyCombinationY = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN);
         if (keyCombinationZ.match(e)) {
-            jTPS.undoTransaction();
+            CSWorkspace.jTPS.undoTransaction();
         }
         else if(keyCombinationY.match(e)){
-            jTPS.doTransaction();
+            CSWorkspace.jTPS.doTransaction();
         }
     }
     
@@ -279,7 +279,7 @@ public class TAController {
             String cellKey = pane.getId();
             
             jTPS_Transaction toggleTransaction = new ToggleTA_Transaction(app,cellKey,taName);
-            jTPS.addTransaction(toggleTransaction);
+            CSWorkspace.jTPS.addTransaction(toggleTransaction);
             // AND TOGGLE THE OFFICE HOURS IN THE CLICKED CELL
             //data.toggleTAOfficeHours(cellKey, taName);
             

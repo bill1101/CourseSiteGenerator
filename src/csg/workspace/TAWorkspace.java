@@ -11,6 +11,8 @@ import static csg.CSGeneratorProp.START_END_TIME_INVALID_MESSAGE;
 import static csg.CSGeneratorProp.START_END_TIME_INVALID_TITLE;
 import csg.data.CSData;
 import csg.data.TeachingAssistant;
+import csg.jtps.ChangeTime_Transaction;
+import csg.jtps.jTPS_Transaction;
 import csg.style.CSStyle;
 import djf.components.AppDataComponent;
 import djf.ui.AppMessageDialogSingleton;
@@ -87,9 +89,11 @@ public class TAWorkspace {
     HashMap<String, Label> officeHoursGridTACellLabels;
     
     
-    SplitPane sPane;
+    HBox sPane;
+    ScrollPane scrollPane;
     String updateName;
     String updateEmail;
+    VBox rightPane;
     boolean isAdd;
     
     /**
@@ -190,7 +194,7 @@ public class TAWorkspace {
         
         
         // INIT THE HEADER ON THE RIGHT
-        officeHoursHeaderBox = new HBox(50);
+        officeHoursHeaderBox = new HBox(300);
         String officeHoursGridText = props.getProperty(CSGeneratorProp.OFFICE_HOURS_SUBHEADER.toString());
         officeHoursHeaderLabel = new Label(officeHoursGridText);
         officeHoursHeaderBox.getChildren().add(officeHoursHeaderLabel);
@@ -213,7 +217,7 @@ public class TAWorkspace {
         leftPane.getChildren().add(tasHeaderBox);        
         leftPane.getChildren().add(taTable);        
         leftPane.getChildren().add(addBox);
-        VBox rightPane = new VBox(10);
+        rightPane = new VBox(10);
         rightPane.getChildren().add(officeHoursHeaderBox);
         rightPane.getChildren().add(officeHoursGridPane);
         //time
@@ -249,7 +253,7 @@ public class TAWorkspace {
             );
         
         final ComboBox comboBox_start = new ComboBox(options_start);
-        /*
+        
         comboBox_start.setOnAction(e -> {
 
             CSData taData = (CSData)app.getDataComponent();
@@ -275,13 +279,14 @@ public class TAWorkspace {
                 }
                 if(confirm){
                     jTPS_Transaction changeStartTransaction = new ChangeTime_Transaction(app,originalStart,originalEnd,hour,originalEnd);
-                    jTPS.addTransaction(changeStartTransaction);
+                    CSWorkspace.jTPS.addTransaction(changeStartTransaction);
                     //taData.setStartHour(hour);
                     //reloadOfficeHoursGrid2(taData,originalStart,originalEnd);
                     //app.getGUI().getFileController().markAsEdited(app.getGUI());
                 }
             }
-        });*/
+        });
+        
         ObservableList<String> options_end = 
             FXCollections.observableArrayList(
                 "00:00am",
@@ -310,7 +315,7 @@ public class TAWorkspace {
                 "11:00pm"
             );
         final ComboBox comboBox_end = new ComboBox(options_end);
-        /*
+        
         comboBox_end.setOnAction(e -> {
             CSData taData = (CSData)app.getDataComponent();
             int originalStart = taData.getStartHour();
@@ -338,23 +343,31 @@ public class TAWorkspace {
                 }
                 if(confirm){
                     jTPS_Transaction changeEndTransaction = new ChangeTime_Transaction(app,originalStart,originalEnd,originalStart,hour);
-                    jTPS.addTransaction(changeEndTransaction);
+                    CSWorkspace.jTPS.addTransaction(changeEndTransaction);
                     //taData.setEndHour(hour);
                     //reloadOfficeHoursGrid2(taData,originalStart,originalEnd);
                     //app.getGUI().getFileController().markAsEdited(app.getGUI());
                 }
             }
         });
-        */
+        
         setTime.getChildren().add(new Label("Start Time"));
         setTime.getChildren().add(comboBox_start);
         setTime.getChildren().add(new Label("End Time"));
         setTime.getChildren().add(comboBox_end);
         
-        
+        scrollPane = new ScrollPane(rightPane);
+        scrollPane.setFitToWidth(true);
         // BOTH PANES WILL NOW GO IN A SPLIT PANE
-        sPane = new SplitPane(leftPane, new VBox(), new ScrollPane(rightPane));
-        sPane.setDividerPositions(0.3,0.31f);
+        //sPane = new SplitPane(leftPane, new VBox(), scrollPane);
+        
+        //sPane.setDividerPositions(0.3,0.31);
+        sPane = new HBox(20);
+        leftPane.setMinWidth(500);
+        leftPane.setMaxWidth(500);
+        scrollPane.setMaxWidth(1100);
+        scrollPane.setMinWidth(1100);
+        sPane.getChildren().addAll(leftPane, scrollPane);
         TAData.setContent(sPane);
         /*
         workspace = new BorderPane();
@@ -414,8 +427,18 @@ public class TAWorkspace {
     public Tab getTAData() {
         return TAData;
     }
-    
-    
+
+    public TableColumn<TeachingAssistant, Boolean> getUndergradColumn() {
+        return undergradColumn;
+    }
+
+    public VBox getRightPane() {
+        return rightPane;
+    }
+
+    public ScrollPane getScrollPane() {
+        return scrollPane;
+    }    
  
     public HBox getTAsHeaderBox() {
         return tasHeaderBox;
@@ -985,7 +1008,7 @@ public class TAWorkspace {
         this.isAdd = isAdd;
     }
 
-    public SplitPane getsPane() {
+    public HBox getsPane() {
         return sPane;
     }
 
