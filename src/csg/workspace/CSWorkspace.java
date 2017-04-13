@@ -23,6 +23,7 @@ import properties_manager.PropertiesManager;
 public class CSWorkspace extends AppWorkspaceComponent{
     CSGeneratorApp app;
     static jTPS jTPS = new jTPS();
+    
     // THIS PROVIDES RESPONSES TO INTERACTIONS WITH THIS WORKSPACE
     CSController controller;
     
@@ -42,7 +43,12 @@ public class CSWorkspace extends AppWorkspaceComponent{
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         tabPane = new TabPane();
         app = initApp;
-        
+        app.getGUI().getUndoButton().setOnAction(e -> {
+            jTPS.undoTransaction();
+        });
+        app.getGUI().getRedobutton().setOnAction(e -> {
+            jTPS.doTransaction();
+        });
         courseDetailsWorkspaceComponent = new CourseDetailsWorkspace(initApp);
         courseDetailsTab = courseDetailsWorkspaceComponent.getCourseDetailsTab();
               
