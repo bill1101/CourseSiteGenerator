@@ -133,12 +133,14 @@
         <property name="TA2_TEXT"                       value="Supervisión de TA:"></property>
         <property name="RECITATION_ADD_EDIT_BUTTON_TEXT"    value="Añadir / actualizar"></property>
         <property name="RECITATION_CLEAR_BUTTON_TEXT"   value="Claro"></property>
+        <property name="START_TIME"                     value="Hora de inicio"></property>
+        <property name="END_TIME"                     value="hora de finalización"></property>
         
         <property name="SCHEDULE_HEADER_TEXT"           value="Programar"></property>
         <property name="CALENDAR_BOUNDARIES_HEADER"     value="Límites del calendario"></property>
         <property name="STARTING_MONDAY_LABEL"          value="Empezando el lunes"></property>
-        <property name="ENDING_FRIDAY_LABEL"            value="Ending Friday"></property>
-        <property name="SCHEDULE_ITEMS_HEADER"          value="Finalizando el viernes"></property>
+        <property name="ENDING_FRIDAY_LABEL"            value="Finalizando el viernes"></property>
+        <property name="SCHEDULE_ITEMS_HEADER"          value="Elementos de programación"></property>
         <property name="REMOVE_SCHEDULE_BUTTON_TEXT"    value="-"></property>
         <property name="TYPE_COLUMN_TEXT"               value="Tipo"></property>
         <property name="DATE_COLUMN_TEXT"               value="Fecha"></property>

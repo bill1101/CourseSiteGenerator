@@ -13,6 +13,7 @@ import djf.components.AppDataComponent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ public class CSData implements AppDataComponent{
     String number;
     String semester;
     String year;
+    String title;
     String instructorName;
     String instructorHome;
     String exportDir;
@@ -63,15 +65,15 @@ public class CSData implements AppDataComponent{
     int endHour;
     
     // DEFAULT VALUES FOR START AND END HOURS IN MILITARY HOURS
-    public static final int MIN_START_HOUR = 0;
-    public static final int MAX_END_HOUR = 24;
+    public static final int MIN_START_HOUR = 9;
+    public static final int MAX_END_HOUR = 13;
     
     ///////////////////////////////////////////////////////////////////Recitation tab
     ObservableList<Recitation> recitations;
     
     ///////////////////////////////////////////////////////////////////Schedule tab
-    StringProperty startingMonday;
-    StringProperty endingFriday;
+    String startingMonday;
+    String endingFriday;
     ObservableList<ScheduleItem> scheduleItems;
     
     ///////////////////////////////////////////////////////////////////Project tab
@@ -83,11 +85,7 @@ public class CSData implements AppDataComponent{
         app = initApp;
 
         sitePages = FXCollections.observableArrayList();
-        sitePages.add(new SitePage(true,"Home","index.html","HomeBuilder.js"));
-        sitePages.add(new SitePage(true,"Syllabus","syllabus.html","SyllabusBuilder.js"));
-        sitePages.add(new SitePage(true,"Schedule","schedule.html","ScheduleBuilder.js"));
-        sitePages.add(new SitePage(true,"HWs","hws.html","HWsBuilder.js"));
-        sitePages.add(new SitePage(false,"Projects","projects.html","ProjectsBuilder.js"));
+        
         // CONSTRUCT THE LIST OF TAs FOR THE TABLE
         teachingAssistants = FXCollections.observableArrayList();
 
@@ -108,22 +106,26 @@ public class CSData implements AppDataComponent{
         recitations = FXCollections.observableArrayList();
         
         scheduleItems = FXCollections.observableArrayList();
+        //startingMonday = new SimpleStringProperty();
+        //endingFriday = new SimpleStringProperty();
         
         teams = FXCollections.observableArrayList();
         students = FXCollections.observableArrayList();
     }
+    
+    
 
     @Override
     public void resetData() {
         //sitePages.clear();
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
-        teachingAssistants.clear();
-        officeHours.clear();
-        recitations.clear();
-        scheduleItems.clear();
-        teams.clear();
-        students.clear();
+        //teachingAssistants.clear();
+        //officeHours.clear();
+        //recitations.clear();
+        //scheduleItems.clear();
+        //teams.clear();
+        //students.clear();
     }
 
     public CSGeneratorApp getApp() {
@@ -166,6 +168,14 @@ public class CSData implements AppDataComponent{
         this.year = year;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
     public String getInstructorName() {
         return instructorName;
     }
@@ -474,10 +484,9 @@ public class CSData implements AppDataComponent{
      * by cellKey. Toggle means if it's there it removes it, if
      * it's not there it adds it.
      */
-    public void toggleTAOfficeHours(String cellKey, String taName) {
-        StringProperty cellProp = officeHours.get(cellKey);
+    public void toggleTAOfficeHours(String cellKey, String taName) {       
+        StringProperty cellProp = officeHours.get(cellKey);       
         String cellText = cellProp.getValue();
-        
         // IF IT ALREADY HAS THE TA, REMOVE IT
         if (cellText.contains(taName)) {
             removeTAFromCell(cellProp, taName);
@@ -530,19 +539,19 @@ public class CSData implements AppDataComponent{
         this.recitations = recitations;
     }
 
-    public StringProperty getStartingMonday() {
+    public String getStartingMonday() {
         return startingMonday;
     }
 
-    public void setStartingMonday(StringProperty startingMonday) {
+    public void setStartingMonday(String startingMonday) {
         this.startingMonday = startingMonday;
     }
 
-    public StringProperty getEndingFriday() {
+    public String getEndingFriday() {
         return endingFriday;
     }
 
-    public void setEndingFriday(StringProperty endingFriday) {
+    public void setEndingFriday(String endingFriday) {
         this.endingFriday = endingFriday;
     }
 

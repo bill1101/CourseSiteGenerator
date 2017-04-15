@@ -9,6 +9,8 @@ import csg.CSGeneratorApp;
 import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.ScheduleItem;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -78,6 +80,7 @@ public class ScheduleWorkspace {
     public ScheduleWorkspace(CSGeneratorApp initApp) {
         app = initApp;
         PropertiesManager props = PropertiesManager.getPropertiesManager();
+        CSData data = (CSData)initApp.getDataComponent();
         
         scheduleTab = new Tab();
         scheduleTab.setText(props.getProperty(CSGeneratorProp.TAB_TITLE_SCHEDULE_DATA.toString()));
@@ -91,8 +94,13 @@ public class ScheduleWorkspace {
         calendarBoundariesHeader = new Label(props.getProperty(CSGeneratorProp.CALENDAR_BOUNDARIES_HEADER.toString()));
         startingMondayLabel = new Label(props.getProperty(CSGeneratorProp.STARTING_MONDAY_LABEL.toString()));
         startingMondayDatePicker = new DatePicker();
+        //startingMondayDatePicker.setValue(LocalDate.parse(data.getStartingMonday()));
+        startingMondayDatePicker.setOnAction(e->{
+            System.out.println(startingMondayDatePicker.getValue());
+        });
         endingFridayLabel = new Label(props.getProperty(CSGeneratorProp.ENDING_FRIDAY_LABEL.toString()));
         endingFridayDatePicker = new DatePicker();
+        //endingFridayDatePicker.setValue(LocalDate.parse(data.getEndingFriday()));
         calendarBoundariesDate = new HBox(20);
         calendarBoundariesDate.getChildren().addAll(startingMondayLabel,startingMondayDatePicker,endingFridayLabel,endingFridayDatePicker);
         calendarBoundariesPane = new VBox(8);
@@ -106,7 +114,7 @@ public class ScheduleWorkspace {
         scheduleItemsHeaderPane.getChildren().addAll(scheduleItemsHeader,removeSchedule);       
         scheduleItemsTable = new TableView<>();
         scheduleItemsTable .getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        CSData data = (CSData) app.getDataComponent();        
+        //CSData data = (CSData) app.getDataComponent();        
         ObservableList<ScheduleItem> tableData = data.getScheduleItems();
         scheduleItemsTable.setItems(tableData);
         typeColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.TYPE_COLUMN_TEXT.toString()));

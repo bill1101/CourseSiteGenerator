@@ -133,6 +133,8 @@
         <property name="TA2_TEXT"                       value="Supervising TA:"></property>
         <property name="RECITATION_ADD_EDIT_BUTTON_TEXT"    value="Add/Update"></property>
         <property name="RECITATION_CLEAR_BUTTON_TEXT"   value="Clear"></property>
+        <property name="START_TIME"                     value="Start Time"></property>
+        <property name="END_TIME"                     value="End Time"></property>
         
         <property name="SCHEDULE_HEADER_TEXT"           value="Schedule"></property>
         <property name="CALENDAR_BOUNDARIES_HEADER"     value="Calendar Boundaries"></property>

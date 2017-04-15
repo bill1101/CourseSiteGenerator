@@ -351,9 +351,9 @@ public class TAWorkspace {
             }
         });
         
-        setTime.getChildren().add(new Label("Start Time"));
+        setTime.getChildren().add(new Label(props.getProperty(CSGeneratorProp.START_TIME)));
         setTime.getChildren().add(comboBox_start);
-        setTime.getChildren().add(new Label("End Time"));
+        setTime.getChildren().add(new Label(props.getProperty(CSGeneratorProp.END_TIME)));
         setTime.getChildren().add(comboBox_end);
         
         scrollPane = new ScrollPane(rightPane);

@@ -186,7 +186,7 @@ public class ProjectsWorkspace {
         studentsPane = new VBox(8);
         studentsPane.getChildren().addAll(studentsHeaderPane, studentsTable,studentsAddEditPane);
         
-        projectsContent = new VBox(20);
+        projectsContent = new VBox(10);
         projectsContent.getChildren().addAll(projectsHeader, teamsPane, studentsPane);
         projectsContent.setStyle("-fx-padding: 20;");
         projectsTab.setContent(projectsContent);
