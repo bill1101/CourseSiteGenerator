@@ -35,7 +35,7 @@
             "script":"HWsBuilder.js"
         },
         {
-            "use":"false",
+            "use":"true",
             "navbarTitle":"Projects",
             "fileName":"projects.html",
             "script":"ProjectsBuilder.js"
@@ -51,7 +51,7 @@
         {
             "name":"Jane Doe",
             "email":"jane.doe@yahoo.com",
-            "undergrad":true
+            "undergrad":false
         },
         {
             "name":"Joe Shmo",

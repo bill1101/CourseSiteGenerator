@@ -7,8 +7,12 @@ package csg.file;
 
 import csg.CSGeneratorApp;
 import csg.data.CSData;
+import csg.data.Recitation;
+import csg.data.ScheduleItem;
 import csg.data.SitePage;
+import csg.data.Student;
 import csg.data.TeachingAssistant;
+import csg.data.Team;
 import djf.components.AppDataComponent;
 import djf.components.AppFileComponent;
 import java.io.FileInputStream;
@@ -19,6 +23,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +73,34 @@ public class CSFiles implements AppFileComponent {
     static final String JSON_NAME = "name";
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
     static final String JSON_EMAIL = "email";
-    static final String JSON_UNDERGRAD = "use";
+    static final String JSON_UNDERGRAD = "undergrad";
+    
+    static final String JSON_RECITATIONS = "recitations";
+    static final String JSON_SECTION = "section";
+    static final String JSON_INSTRUCTOR = "instructor";
+    static final String JSON_DAYTIME = "day_time";
+    static final String JSON_LOCATION = "location";
+    static final String JSON_TA1 = "ta_1";
+    static final String JSON_TA2 = "ta_2";
+    
+    static final String JSON_STARTING_MONDAY = "startingMonday";
+    static final String JSON_ENDING_FRIDAY = "endingFriday";
+    static final String JSON_SCHEDULE_ITEMS = "scheduleItems";
+    static final String JSON_TYPE = "type";
+    static final String JSON_DATE = "date";
+    static final String JSON_SCHEDULE_TITLE = "title";
+    static final String JSON_TOPIC = "topic";
+    
+    static final String JSON_TEAMS = "teams";
+    static final String JSON_TEAM_NAME = "name";
+    static final String JSON_COLOR = "color";
+    static final String JSON_TEXT_COLOR = "text_color";
+    static final String JSON_LINK = "link";
+    static final String JSON_STUDENTS = "students";
+    static final String JSON_FIRSTNAME = "firstName";
+    static final String JSON_LASTNAME = "lastName";
+    static final String JSON_TEAM = "team";
+    static final String JSON_ROLE = "role";
     
     public CSFiles(CSGeneratorApp initApp) {
         app = initApp;
@@ -95,7 +128,8 @@ public class CSFiles implements AppFileComponent {
 	for (TeachingAssistant ta : tas) {	    
 	    JsonObject taJson = Json.createObjectBuilder()
 		    .add(JSON_NAME, ta.getName())
-		    .add(JSON_EMAIL, ta.getEmail()).build();
+		    .add(JSON_EMAIL, ta.getEmail())
+                    .add(JSON_UNDERGRAD, ta.getUndergrad()).build();
 	    taArrayBuilder.add(taJson);
 	}
 	JsonArray undergradTAsArray = taArrayBuilder.build();
@@ -111,6 +145,56 @@ public class CSFiles implements AppFileComponent {
 	    timeSlotArrayBuilder.add(tsJson);
 	}
 	JsonArray timeSlotsArray = timeSlotArrayBuilder.build();
+        
+        JsonArrayBuilder recitationArrayBuilder = Json.createArrayBuilder();
+        ObservableList<Recitation> recitations = dataManager.getRecitations();
+        for (Recitation re : recitations) {
+            JsonObject recitationJson = Json.createObjectBuilder()
+                    .add(JSON_SECTION, re.getSection())
+                    .add(JSON_INSTRUCTOR, re.getInstructor())
+                    .add(JSON_DAYTIME, re.getDayTime())
+                    .add(JSON_LOCATION, re.getLocation())
+                    .add(JSON_TA1, re.getTA1())
+                    .add(JSON_TA2, re.getTA2()).build();
+            recitationArrayBuilder.add(recitationJson);
+        }
+        JsonArray recitationArray = recitationArrayBuilder.build();
+        
+        JsonArrayBuilder scheduleItemArrayBuilder = Json.createArrayBuilder();
+        ObservableList<ScheduleItem> items = dataManager.getScheduleItems();
+        for (ScheduleItem item : items) {
+            JsonObject itemJson = Json.createObjectBuilder()
+                    .add(JSON_TYPE, item.getType())
+                    .add(JSON_DATE, item.getDate())
+                    .add(JSON_SCHEDULE_TITLE, item.getTitle())
+                    .add(JSON_TOPIC, item.getTopic()).build();
+            scheduleItemArrayBuilder.add(itemJson);
+        }
+        JsonArray scheduleItemArray = scheduleItemArrayBuilder.build();
+        
+        JsonArrayBuilder teamArrayBuilder = Json.createArrayBuilder();
+        ObservableList<Team> teams = dataManager.getTeams();
+        for (Team team : teams) {
+            JsonObject teamJson = Json.createObjectBuilder()
+                    .add(JSON_TEAM_NAME, team.getName())
+                    .add(JSON_COLOR, team.getColor())
+                    .add(JSON_TEXT_COLOR, team.getTextColor())
+                    .add(JSON_LINK, team.getLink()).build();
+            teamArrayBuilder.add(teamJson);
+        }
+        JsonArray teamArray = teamArrayBuilder.build();
+        
+        JsonArrayBuilder studentArrayBuilder = Json.createArrayBuilder();
+        ObservableList<Student> students = dataManager.getStudents();
+        for (Student student : students) {
+            JsonObject studentJson = Json.createObjectBuilder()
+                    .add(JSON_FIRSTNAME, student.getFirstName())
+                    .add(JSON_LASTNAME, student.getLastName())
+                    .add(JSON_TEAM, student.getTeam())
+                    .add(JSON_ROLE, student.getRole()).build();
+            studentArrayBuilder.add(studentJson);
+        }
+        JsonArray studentArray = studentArrayBuilder.build();
         
 	// THEN PUT IT ALL TOGETHER IN A JsonObject
 	JsonObject dataManagerJSO = Json.createObjectBuilder()
@@ -133,6 +217,15 @@ public class CSFiles implements AppFileComponent {
 		.add(JSON_END_HOUR, "" + dataManager.getEndHour())
                 .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
                 .add(JSON_OFFICE_HOURS, timeSlotsArray)
+                
+                .add(JSON_RECITATIONS, recitationArray)
+                
+                .add(JSON_STARTING_MONDAY, dataManager.getStartingMonday())
+                .add(JSON_ENDING_FRIDAY, dataManager.getEndingFriday())
+                .add(JSON_SCHEDULE_ITEMS, scheduleItemArray)
+                
+                .add(JSON_TEAMS, teamArray)
+                .add(JSON_STUDENTS, studentArray)
 		.build();
 	
 	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
@@ -160,14 +253,36 @@ public class CSFiles implements AppFileComponent {
         
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
-
+        
+        dataManager.setSubject(json.getString(JSON_SUBJECT));
+        dataManager.setNumber(json.getString(JSON_NUMBER));
+        dataManager.setSemester(json.getString(JSON_SEMESTER));
+        dataManager.setYear(json.getString(JSON_YEAR));
+        dataManager.setTitle(json.getString(JSON_TITLE));
+        dataManager.setInstructorName(json.getString(JSON_INSTRUCTOR_NAME));
+        dataManager.setInstructorHome(json.getString(JSON_INSTRUCTOR_HOME));
+        dataManager.setExportDir(json.getString(JSON_EXPORT_DIR));
+        dataManager.setTemplateDir(json.getString(JSON_TEMPLATES_DIR));
+        dataManager.setBannerSchoolImage(json.getString(JSON_BANNER_SCHOOL_IMAGE));
+        dataManager.setLeftFooterImage(json.getString(JSON_LEFT_FOOTER_IMAGE));
+        dataManager.setRightFooterImage(json.getString(JSON_RIGHT_FOOTER_IMAGE));
+        dataManager.setStyleSheet(json.getString(JSON_STYLESHEET));
+        JsonArray jsonSitePageArray = json.getJsonArray(JSON_SITE_PAGES);
+        for (int i = 0; i < jsonSitePageArray.size(); i++) {
+            JsonObject jsonSitePage = jsonSitePageArray.getJsonObject(i);
+            Boolean use = Boolean.parseBoolean(jsonSitePage.getString(JSON_USE));
+            String navbarTitle = jsonSitePage.getString(JSON_NAVBAR_TITLE);
+            String fileName = jsonSitePage.getString(JSON_FILE_NAME);
+            String script = jsonSitePage.getString(JSON_SCRIPT);
+            dataManager.getSitePages().add(new SitePage(use,navbarTitle,fileName,script));
+        }
+        
 	// LOAD THE START AND END HOURS
 	String startHour = json.getString(JSON_START_HOUR);
         String endHour = json.getString(JSON_END_HOUR);
         dataManager.initHours(startHour, endHour);
 
-        // NOW RELOAD THE WORKSPACE WITH THE LOADED DATA
-        app.getWorkspaceComponent().reloadWorkspace(app.getDataComponent());
+        
         // NOW LOAD ALL THE UNDERGRAD TAs
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
         for (int i = 0; i < jsonTAArray.size(); i++) {
@@ -185,6 +300,55 @@ public class CSFiles implements AppFileComponent {
             String name = jsonOfficeHours.getString(JSON_NAME);
             dataManager.addOfficeHoursReservation(day, time, name);
         }
+        
+        JsonArray jsonRecitationArray = json.getJsonArray(JSON_RECITATIONS);
+        for (int i = 0; i < jsonRecitationArray.size(); i++) {
+            JsonObject jsonRecitation = jsonRecitationArray.getJsonObject(i);
+            String section = jsonRecitation.getString(JSON_SECTION);
+            String instructor = jsonRecitation.getString(JSON_INSTRUCTOR);
+            String dayTime = jsonRecitation.getString(JSON_DAYTIME);
+            String location = jsonRecitation.getString(JSON_LOCATION);
+            String TA1 = jsonRecitation.getString(JSON_TA1);
+            String TA2 = jsonRecitation.getString(JSON_TA2);
+            dataManager.getRecitations().add(new Recitation(section,instructor,dayTime,location,TA1,TA2));
+        }
+        
+        dataManager.setStartingMonday(json.getString(JSON_STARTING_MONDAY));
+        //System.out.println("11111"+dataManager.getStartingMonday());
+        dataManager.setEndingFriday(json.getString(JSON_ENDING_FRIDAY));
+        
+        JsonArray jsonScheduleItemArray = json.getJsonArray(JSON_SCHEDULE_ITEMS);
+        for(int i = 0; i < jsonScheduleItemArray.size(); i++) {
+            JsonObject jsonScheduleItem = jsonScheduleItemArray.getJsonObject(i);
+            String type = jsonScheduleItem.getString(JSON_TYPE);
+            String date = jsonScheduleItem.getString(JSON_DATE);
+            String title = jsonScheduleItem.getString(JSON_SCHEDULE_TITLE);
+            String topic = jsonScheduleItem.getString(JSON_TOPIC);
+            dataManager.getScheduleItems().add(new ScheduleItem(type,date,title,topic));
+        }
+        
+        JsonArray jsonTeamsArray = json.getJsonArray(JSON_TEAMS);
+        for(int i = 0; i < jsonTeamsArray.size(); i++) {
+            JsonObject jsonTeamItem = jsonTeamsArray.getJsonObject(i);
+            String name = jsonTeamItem.getString(JSON_TEAM_NAME);
+            String color = jsonTeamItem.getString(JSON_COLOR);
+            String text_color = jsonTeamItem.getString(JSON_TEXT_COLOR);
+            String link = jsonTeamItem.getString(JSON_LINK);
+            dataManager.getTeams().add(new Team(name,color,text_color,link));
+        }
+        
+        JsonArray jsonStudentsArray = json.getJsonArray(JSON_STUDENTS);
+        for(int i = 0; i < jsonStudentsArray.size(); i++) {
+            JsonObject jsonStudent = jsonStudentsArray.getJsonObject(i);
+            String firstName = jsonStudent.getString(JSON_FIRSTNAME);
+            String lastName = jsonStudent.getString(JSON_LASTNAME);
+            String team = jsonStudent.getString(JSON_TEAM);
+            String role = jsonStudent.getString(JSON_ROLE);
+            dataManager.getStudents().add(new Student(firstName,lastName,team,role));
+        }
+        // NOW RELOAD THE WORKSPACE WITH THE LOADED DATA
+        app.getWorkspaceComponent().reloadWorkspace(app.getDataComponent());
+        
     }
 
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT

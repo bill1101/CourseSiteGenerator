@@ -483,5 +483,13 @@ public class ScheduleWorkspace {
     public void setScheduleContent(VBox scheduleContent) {
         this.scheduleContent = scheduleContent;
     }
+
+    void reloadWorkspace(CSData csData) {
+        //System.out.println(csData);
+        LocalDate start = LocalDate.parse(csData.getStartingMonday());
+        startingMondayDatePicker.setValue(start);
+        LocalDate end = LocalDate.parse(csData.getEndingFriday());
+        endingFridayDatePicker.setValue(end);
+    }
        
 }

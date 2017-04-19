@@ -10,6 +10,8 @@ import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.SitePage;
 import csg.style.CSStyle;
+import static djf.settings.AppStartupConstants.FILE_PROTOCOL;
+import static djf.settings.AppStartupConstants.PATH_IMAGES;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -18,16 +20,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 
 /**
@@ -166,8 +173,8 @@ public class CourseDetailsWorkspace {
         sitePagesTable.setItems(tableData);
         sitePagesTable.getColumns();
         useColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.USE_COLUMN_TEXT.toString()));
-        //useColumn.setCellValueFactory(new PropertyValueFactory<SitePage, Boolean>("use"));
-        useColumn.setCellFactory(column -> new CheckBoxTableCell());    
+        useColumn.setCellValueFactory(param -> param.getValue().isUndergrad());
+        useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));   
         navbarTitleColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.NAVBAR_TITLE_COLUMN_TEXT.toString()));
         navbarTitleColumn.setCellValueFactory(new PropertyValueFactory<SitePage, String>("navBarTitle"));
         fileNameColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.FILE_NAME_COLUMN_TEXT.toString()));
@@ -233,7 +240,26 @@ public class CourseDetailsWorkspace {
         //csStyle.initCourseDetailsWorkspaceStyle();
         
     }
-
+    void reloadWorkspace(CSData data) {
+        //System.out.println(data);
+        subjectComboBox.setValue(data.getSubject());
+        numberComboBox.setValue(data.getNumber());
+        semesterComboBox.setValue(data.getSemester());
+        yearComboBox.setValue(data.getYear());
+        titleTextField.setText(data.getTitle());
+        instructorNameTextField.setText(data.getInstructorName());
+        instructorHomeTextField.setText(data.getInstructorHome());
+        exportDirContent.setText(data.getExportDir());
+        selectTemplateContent.setText(data.getTemplateDir());
+        Image bannerImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getBannerSchoolImage(),250,30,false,false);
+        bannerSchoolImage.setImage(bannerImage);
+        Image leftImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getLeftFooterImage(),250,30,false,false);
+        leftFooterImage.setImage(leftImage);
+        Image rightImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getRightFooterImage(),250,30,false,false);
+        rightFooterImage.setImage(rightImage);
+        stylesheetComboBox.setValue(data.getStyleSheet());
+    }
+    
     public SplitPane getSitePagesContainer() {
         return sitePagesContainer;
     }
@@ -617,6 +643,8 @@ public class CourseDetailsWorkspace {
     public void setCourseSiteContent(VBox courseSiteContent) {
         this.courseSiteContent = courseSiteContent;
     }
+
+    
     
     
 }

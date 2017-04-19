@@ -117,15 +117,15 @@ public class CSData implements AppDataComponent{
 
     @Override
     public void resetData() {
-        //sitePages.clear();
+        sitePages.clear();
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
-        //teachingAssistants.clear();
-        //officeHours.clear();
-        //recitations.clear();
-        //scheduleItems.clear();
-        //teams.clear();
-        //students.clear();
+        teachingAssistants.clear();
+        officeHours.clear();
+        recitations.clear();
+        scheduleItems.clear();
+        teams.clear();
+        students.clear();
     }
 
     public CSGeneratorApp getApp() {

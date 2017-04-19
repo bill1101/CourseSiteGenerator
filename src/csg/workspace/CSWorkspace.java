@@ -110,7 +110,9 @@ public class CSWorkspace extends AppWorkspaceComponent{
     @Override
     public void reloadWorkspace(AppDataComponent dataComponent) {
         CSData csData = (CSData)dataComponent;
+        courseDetailsWorkspaceComponent.reloadWorkspace(csData);
         TAworkspaceComponent.reloadOfficeHoursGrid(csData);
+        scheduleWorkspaceComponent.reloadWorkspace(csData);
     }
     
 }

@@ -24,11 +24,12 @@ public class CSGeneratorApp extends AppTemplate{
     @Override
     public void buildAppComponentsHook() {
         dataComponent = new CSData(this);
+
         workspaceComponent = new CSWorkspace(this);       
         fileComponent = new CSFiles(this);
         styleComponent = new CSStyle(this);
         
-        hardCodeDate(dataComponent);
+        //hardCodeDate(dataComponent);
     }
     
     public void hardCodeDate(AppDataComponent appData){
@@ -48,7 +49,7 @@ public class CSGeneratorApp extends AppTemplate{
         data.getSitePages().add(new SitePage(true,"HWs","hws.html","HWsBuilder.js"));
         data.getSitePages().add(new SitePage(false,"Projects","projects.html","ProjectsBuilder.js"));
         data.setBannerSchoolImage("banner.png");
-        data.setLeftFooterImage("footer.png");
+        data.setLeftFooterImage("left.png");
         data.setRightFooterImage("right.png");
         data.setStyleSheet("sea_wolf.css");
         
