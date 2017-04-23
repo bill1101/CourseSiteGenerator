@@ -485,11 +485,14 @@ public class ScheduleWorkspace {
     }
 
     void reloadWorkspace(CSData csData) {
-        //System.out.println(csData);
-        LocalDate start = LocalDate.parse(csData.getStartingMonday());
-        startingMondayDatePicker.setValue(start);
-        LocalDate end = LocalDate.parse(csData.getEndingFriday());
-        endingFridayDatePicker.setValue(end);
+        if(csData.getStartingMonday()!=null){
+            LocalDate start = LocalDate.parse(csData.getStartingMonday());
+            startingMondayDatePicker.setValue(start);
+        }
+        if(csData.getEndingFriday()!=null){
+            LocalDate end = LocalDate.parse(csData.getEndingFriday());
+            endingFridayDatePicker.setValue(end);
+        }
     }
        
 }

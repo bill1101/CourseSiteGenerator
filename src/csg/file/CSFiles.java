@@ -15,6 +15,9 @@ import csg.data.TeachingAssistant;
 import csg.data.Team;
 import djf.components.AppDataComponent;
 import djf.components.AppFileComponent;
+import static djf.settings.AppStartupConstants.PATH_DATA;
+import static djf.settings.AppStartupConstants.PATH_HTML;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -250,7 +253,6 @@ public class CSFiles implements AppFileComponent {
     @Override
     public void loadData(AppDataComponent data, String filePath) throws IOException {
         CSData dataManager = (CSData)data;
-        
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
         
@@ -280,8 +282,10 @@ public class CSFiles implements AppFileComponent {
 	// LOAD THE START AND END HOURS
 	String startHour = json.getString(JSON_START_HOUR);
         String endHour = json.getString(JSON_END_HOUR);
-        dataManager.initHours(startHour, endHour);
-
+        
+        dataManager.setStartingMonday(json.getString(JSON_STARTING_MONDAY));
+        dataManager.setEndingFriday(json.getString(JSON_ENDING_FRIDAY));
+        
         
         // NOW LOAD ALL THE UNDERGRAD TAs
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
@@ -291,7 +295,13 @@ public class CSFiles implements AppFileComponent {
             String email = jsonTA.getString(JSON_EMAIL);
             dataManager.addTA(name, email);
         }
-        // AND THEN ALL THE OFFICE HOURS
+        if(app.getWorkspaceComponent() != null){
+            dataManager.initHours(startHour, endHour);
+            // NOW RELOAD THE WORKSPACE WITH THE LOADED DATA
+            app.getWorkspaceComponent().reloadWorkspace(app.getDataComponent());
+            // AND THEN ALL THE OFFICE HOURS
+        }
+        
         JsonArray jsonOfficeHoursArray = json.getJsonArray(JSON_OFFICE_HOURS);
         for (int i = 0; i < jsonOfficeHoursArray.size(); i++) {
             JsonObject jsonOfficeHours = jsonOfficeHoursArray.getJsonObject(i);
@@ -312,11 +322,7 @@ public class CSFiles implements AppFileComponent {
             String TA2 = jsonRecitation.getString(JSON_TA2);
             dataManager.getRecitations().add(new Recitation(section,instructor,dayTime,location,TA1,TA2));
         }
-        
-        dataManager.setStartingMonday(json.getString(JSON_STARTING_MONDAY));
-        //System.out.println("11111"+dataManager.getStartingMonday());
-        dataManager.setEndingFriday(json.getString(JSON_ENDING_FRIDAY));
-        
+              
         JsonArray jsonScheduleItemArray = json.getJsonArray(JSON_SCHEDULE_ITEMS);
         for(int i = 0; i < jsonScheduleItemArray.size(); i++) {
             JsonObject jsonScheduleItem = jsonScheduleItemArray.getJsonObject(i);
@@ -346,8 +352,7 @@ public class CSFiles implements AppFileComponent {
             String role = jsonStudent.getString(JSON_ROLE);
             dataManager.getStudents().add(new Student(firstName,lastName,team,role));
         }
-        // NOW RELOAD THE WORKSPACE WITH THE LOADED DATA
-        app.getWorkspaceComponent().reloadWorkspace(app.getDataComponent());
+        
         
     }
 
@@ -363,11 +368,49 @@ public class CSFiles implements AppFileComponent {
     
     @Override
     public void exportData(AppDataComponent data, String filePath) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        File source = new File(PATH_HTML);
+        String s = source.getAbsolutePath();
+        File destination = new File(filePath);
+        System.out.println(source.isDirectory());
+        System.out.println(destination.isDirectory());
+        copyDirectory(source, destination);
+        
+        String jsonDir = destination.getPath();
+        System.out.println(jsonDir);
     }
 
     @Override
     public void importData(AppDataComponent data, String filePath) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void copyDirectory(File sourceLocation , File targetLocation) throws IOException {
+
+//        if(sourceLocation.getPath().endsWith("OfficeHoursGridData.json")){
+//            String path = targetLocation.getPath();
+//            //System.out.println(path);
+//            app.getFileComponent().saveData(app.getDataComponent(), path);
+//        }
+        if (sourceLocation.isDirectory()) {
+            if (!targetLocation.exists()) {
+                targetLocation.mkdir();
+            }
+            String[] children = sourceLocation.list();
+            for (int i=0; i<children.length; i++) {
+                copyDirectory(new File(sourceLocation, children[i]),
+                        new File(targetLocation, children[i]));
+            }
+        } else {
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+            // Copy the bits from instream to outstream
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+        }
     }
 }

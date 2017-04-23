@@ -53,10 +53,11 @@ public class TimeSlot {
         ArrayList<TimeSlot> officeHoursList = new ArrayList();
         ArrayList<String> gridHeaders = data.getGridHeaders();
         HashMap<String, StringProperty> officeHours = data.getOfficeHours();
+        //System.out.println(data.getNumRows());
         for (int row = 1; row < data.getNumRows(); row++) {
             for (int col = 2; col < 7; col++) {
                 // WE ONLY WANT THE DATA, NOTE THE HEADERS
-                String cellKey = data.getCellKey(col, row);
+                String cellKey = data.getCellKey(col, row);               
                 StringProperty timeSlotProp = officeHours.get(cellKey);
                 String timeSlotText = timeSlotProp.getValue();
                 String[] taNames = timeSlotText.split("\n");

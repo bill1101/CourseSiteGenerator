@@ -104,7 +104,18 @@ public class CSWorkspace extends AppWorkspaceComponent{
     
     @Override
     public void resetWorkspace() {
+        // CLEAR OUT THE GRID PANE
+        TAworkspaceComponent.officeHoursGridPane.getChildren().clear();
         
+        // AND THEN ALL THE GRID PANES AND LABELS
+        TAworkspaceComponent.officeHoursGridTimeHeaderPanes.clear();
+        TAworkspaceComponent.officeHoursGridTimeHeaderLabels.clear();
+        TAworkspaceComponent.officeHoursGridDayHeaderPanes.clear();
+        TAworkspaceComponent.officeHoursGridDayHeaderLabels.clear();
+        TAworkspaceComponent.officeHoursGridTimeCellPanes.clear();
+        TAworkspaceComponent.officeHoursGridTimeCellLabels.clear();
+        TAworkspaceComponent.officeHoursGridTACellPanes.clear();
+        TAworkspaceComponent.officeHoursGridTACellLabels.clear();
     }
 
     @Override

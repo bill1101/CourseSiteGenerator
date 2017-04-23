@@ -484,7 +484,7 @@ public class CSData implements AppDataComponent{
      * by cellKey. Toggle means if it's there it removes it, if
      * it's not there it adds it.
      */
-    public void toggleTAOfficeHours(String cellKey, String taName) {       
+    public void toggleTAOfficeHours(String cellKey, String taName) {
         StringProperty cellProp = officeHours.get(cellKey);       
         String cellText = cellProp.getValue();
         // IF IT ALREADY HAS THE TA, REMOVE IT
