@@ -18,14 +18,39 @@ public class ScheduleItem<E extends Comparable<E>> implements Comparable<E> {
     private final StringProperty date;
     private final StringProperty title;
     private final StringProperty topic;
+    private final StringProperty link;
+    private final StringProperty time;
+    private final StringProperty criteria;
 
-    public ScheduleItem(String type, String date, String title, String topic) {
+    public ScheduleItem(String type, String date, String title, String topic, String link,String time,String criteria) {
         this.type = new SimpleStringProperty(type);
         this.date = new SimpleStringProperty(date);
         this.title = new SimpleStringProperty(title);
         this.topic = new SimpleStringProperty(topic);
+        this.link = new SimpleStringProperty(link);
+        this.time = new SimpleStringProperty(time);
+        this.criteria = new SimpleStringProperty(criteria);
     }
-
+    public String getTime() {
+        return time.get();
+    }
+    public void setTime(String time) {
+        this.time.set(time);
+    }
+    public String getLink() {
+        return link.get();
+    }
+    public void setLink(String link) {
+        this.link.set(link);
+    }
+    
+    public String getCriteria() {
+        return criteria.get();
+    }
+    public void setCriteria(String criteria) {
+        this.criteria.set(criteria);
+    }
+    
     public String getType() {
         return type.get();
     }

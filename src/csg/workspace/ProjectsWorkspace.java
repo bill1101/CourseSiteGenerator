@@ -117,6 +117,9 @@ public class ProjectsWorkspace {
         nameTextField = new TextField();
         colorLabel = new Label(props.getProperty(CSGeneratorProp.COLOR_TEXT.toString()));
         colorPicker = new ColorPicker();
+        colorPicker.setOnAction(e -> {
+            System.out.println(colorPicker.getValue());
+        });
         colorPicker.setMinHeight(25);
         textColorPickerLabel = new Label(props.getProperty(CSGeneratorProp.TEXT_COLOR_TEXT.toString()));
         textColorPicker = new ColorPicker();

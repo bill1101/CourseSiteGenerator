@@ -457,7 +457,20 @@ public class CSData implements AppDataComponent{
         // SORT THE TAS
         Collections.sort(teachingAssistants);
     }
+    
+    public void addTA(Boolean undergrad, String initName, String initEmail) {
+        // MAKE THE TA
+        TeachingAssistant ta = new TeachingAssistant(initName, initEmail, undergrad);
 
+        // ADD THE TA
+        if (!containsTA(initName, initEmail)) {
+            teachingAssistants.add(ta);
+        }
+
+        // SORT THE TAS
+        Collections.sort(teachingAssistants);
+    }
+    
     public void removeTA(String name) {
         for (TeachingAssistant ta : teachingAssistants) {
             if (name.equals(ta.getName())) {

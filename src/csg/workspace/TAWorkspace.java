@@ -134,8 +134,8 @@ public class TAWorkspace {
         nameColumn = new TableColumn(nameColumnText);    
         emailColumn = new TableColumn(emailColumnText);
         undergradColumn = new TableColumn(props.getProperty(CSGeneratorProp.UNDERGRAD_COLUMN_TEXT.toString()));
-        //useColumn.setCellValueFactory(new PropertyValueFactory<SitePage, Boolean>("use"));
-        undergradColumn.setCellFactory(column -> new CheckBoxTableCell());     
+        undergradColumn.setCellValueFactory(param -> param.getValue().isUndergrad());
+        undergradColumn.setCellFactory(CheckBoxTableCell.forTableColumn(undergradColumn));
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<TeachingAssistant, String>("name")
         );

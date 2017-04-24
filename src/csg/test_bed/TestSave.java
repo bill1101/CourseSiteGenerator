@@ -41,22 +41,24 @@ public class TestSave{
         csData.getOfficeHours().put("4_0", new SimpleStringProperty("WEDNESDAY"));
         csData.getOfficeHours().put("5_0", new SimpleStringProperty("THURSDAY"));
         csData.getOfficeHours().put("6_0", new SimpleStringProperty("FRIDAY"));
+        
         csData.getOfficeHours().put("0_1", new SimpleStringProperty("9:00am"));
         csData.getOfficeHours().put("0_2", new SimpleStringProperty("9:30am"));
         csData.getOfficeHours().put("0_3", new SimpleStringProperty("10:00am"));
         csData.getOfficeHours().put("0_4", new SimpleStringProperty("10:30am"));
         csData.getOfficeHours().put("0_5", new SimpleStringProperty("11:00am"));
         csData.getOfficeHours().put("0_6", new SimpleStringProperty("11:30am"));
-        csData.getOfficeHours().put("0_7", new SimpleStringProperty("11:30am"));
-        csData.getOfficeHours().put("0_8", new SimpleStringProperty("12:30am"));        
+        csData.getOfficeHours().put("0_7", new SimpleStringProperty("12:00pm"));
+        csData.getOfficeHours().put("0_8", new SimpleStringProperty("12:30pm"));
+        
         csData.getOfficeHours().put("1_1", new SimpleStringProperty("9:30am"));
         csData.getOfficeHours().put("1_1", new SimpleStringProperty("10:00am"));
         csData.getOfficeHours().put("1_3", new SimpleStringProperty("10:30am"));
         csData.getOfficeHours().put("1_4", new SimpleStringProperty("11:00am"));
         csData.getOfficeHours().put("1_5", new SimpleStringProperty("11:30am"));
-        csData.getOfficeHours().put("1_6", new SimpleStringProperty("11:30am"));
-        csData.getOfficeHours().put("1_7", new SimpleStringProperty("12:30am"));
-        csData.getOfficeHours().put("1_8", new SimpleStringProperty("13:00am"));
+        csData.getOfficeHours().put("1_6", new SimpleStringProperty("12:00pm"));
+        csData.getOfficeHours().put("1_7", new SimpleStringProperty("12:30pm"));       
+        csData.getOfficeHours().put("1_8", new SimpleStringProperty("13:00pm"));
         
         //2_1 --  6_8
         for(int i=2;i<=6;i++){
@@ -78,7 +80,7 @@ public class TestSave{
         csData.getOfficeHours().put("6_8", new SimpleStringProperty("Jane Doe"));
         hardCodeData(csData);
         CSFiles csFiles = new CSFiles(csgenerator);
-        csFiles.saveData(csData, "./work/hardcode1.json");     
+        csFiles.saveData(csData, "./work/hardcode2.json");     
     }
 
     public static void hardCodeData(AppDataComponent appData){
@@ -96,7 +98,7 @@ public class TestSave{
         data.getSitePages().add(new SitePage(true,"Syllabus","syllabus.html","SyllabusBuilder.js"));
         data.getSitePages().add(new SitePage(true,"Schedule","schedule.html","ScheduleBuilder.js"));
         data.getSitePages().add(new SitePage(true,"HWs","hws.html","HWsBuilder.js"));
-        data.getSitePages().add(new SitePage(false,"Projects","projects.html","ProjectsBuilder.js"));
+        data.getSitePages().add(new SitePage(true,"Projects","projects.html","ProjectsBuilder.js"));
         data.setBannerSchoolImage("SBUDarkRedShieldLogo.png");
         data.setLeftFooterImage("SBUWhiteShieldLogo.jpg");
         data.setRightFooterImage("CSLogo.png");
@@ -110,15 +112,15 @@ public class TestSave{
         data.getRecitations().add(new Recitation("R02","Mckenna","Wed 3:30pm-4:23pm","Old CS 2114","Jane Doe","Joe Shmo"));
         data.getRecitations().add(new Recitation("R05","Banerjee","Tues 5:30pm-6:23pm","Old CS 2114","",""));
         
-        data.setStartingMonday("2017-04-05");
-        data.setEndingFriday("2017-04-15");
-        data.getScheduleItems().add(new ScheduleItem("Holiday","2/9/2017","SNOW DAY",""));
-        data.getScheduleItems().add(new ScheduleItem("Lecture","2/14/2017","Lecture 3","Event Programming"));
-        data.getScheduleItems().add(new ScheduleItem("Holiday","3/13/2017","Spring Break",""));
-        data.getScheduleItems().add(new ScheduleItem("HW","3/27/2017","HW3","UML"));
+        data.setStartingMonday("2017-01-23");
+        data.setEndingFriday("2017-05-19");
+        data.getScheduleItems().add(new ScheduleItem("Holiday","2/9/2017","SNOW DAY","","http://funnybizblog.com","",""));
+        data.getScheduleItems().add(new ScheduleItem("Lecture","2/14/2017","Lecture 3","Event Programming","","",""));
+        data.getScheduleItems().add(new ScheduleItem("Holiday","3/13/2017","Spring Break","","","",""));
+        data.getScheduleItems().add(new ScheduleItem("HW","3/27/2017","HW3","UML","","11:59pm",""));
         
-        data.getTeams().add(new Team("Atomio Comics","552211","ffffff","http://atomicomic.com"));
-        data.getTeams().add(new Team("C4 Comics","235399","ffffff","http://c4-comics.appspot.com"));
+        data.getTeams().add(new Team("Atomic Comics","#552211ff","#ffffffff","http://atomicomic.com"));
+        data.getTeams().add(new Team("C4 Comics","#235399ff","#ffffffff","http://c4-comics.appspot.com"));
         
         data.getStudents().add(new Student("Beau","Brummell","Atomic Comics","Lead Designer"));
         data.getStudents().add(new Student("Jane","Doe","C4 Comics","Lead Programmer"));

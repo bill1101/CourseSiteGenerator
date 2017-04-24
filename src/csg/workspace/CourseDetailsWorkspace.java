@@ -173,7 +173,7 @@ public class CourseDetailsWorkspace {
         sitePagesTable.setItems(tableData);
         sitePagesTable.getColumns();
         useColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.USE_COLUMN_TEXT.toString()));
-        useColumn.setCellValueFactory(param -> param.getValue().isUndergrad());
+        useColumn.setCellValueFactory(param -> param.getValue().isUse());
         useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));   
         navbarTitleColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.NAVBAR_TITLE_COLUMN_TEXT.toString()));
         navbarTitleColumn.setCellValueFactory(new PropertyValueFactory<SitePage, String>("navBarTitle"));

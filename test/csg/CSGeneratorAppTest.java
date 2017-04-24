@@ -6,15 +6,19 @@
 package csg;
 
 import csg.data.CSData;
+import csg.data.Recitation;
 import csg.data.SitePage;
+import csg.data.TeachingAssistant;
 import csg.file.CSFiles;
 import djf.settings.AppStartupConstants;
 import static djf.settings.AppStartupConstants.APP_PROPERTIES_FILE_NAME;
 import djf.ui.AppYesNoCancelDialogSingleton;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -84,7 +88,7 @@ public class CSGeneratorAppTest {
             }
             //System.out.println(csData.getOfficeHours());
             csFiles = new CSFiles(csgenerator);
-            csFiles.loadData(csData, "./work/hardcode1.json");
+            csFiles.loadData(csData, "./work/hardcode2.json");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -145,7 +149,7 @@ public class CSGeneratorAppTest {
         assertEquals("HWs",sitePages.get(3).getNavBarTitle());
         assertEquals("hws.html",sitePages.get(3).getFileName());
         assertEquals("HWsBuilder.js",sitePages.get(3).getScript());
-        assertEquals(false,sitePages.get(4).getUse());
+        assertEquals(true,sitePages.get(4).getUse());
         assertEquals("Projects",sitePages.get(4).getNavBarTitle());
         assertEquals("projects.html",sitePages.get(4).getFileName());
         assertEquals("ProjectsBuilder.js",sitePages.get(4).getScript());
@@ -165,5 +169,125 @@ public class CSGeneratorAppTest {
     @Test
     public void testStylesheet() {
         assertEquals("sea_wolf.css",csData.getStyleSheet());
+    }
+    @Test
+    public void testStartHour() {
+        assertEquals(9,csData.getStartHour());
+    }
+    @Test
+    public void testEndHour() {
+        assertEquals(13,csData.getEndHour());
+    }
+    @Test
+    public void testUndergrad_tas() {
+        ObservableList<TeachingAssistant> tas = csData.getTeachingAssistants();
+        assertEquals(true,tas.get(0).getUndergrad());
+        assertEquals("Jane Doe",tas.get(0).getName());
+        assertEquals("jane.doe@yahoo.com",tas.get(0).getEmail());
+        assertEquals(false,tas.get(1).getUndergrad());
+        assertEquals("Joe Shmo",tas.get(1).getName());
+        assertEquals("joe.shmo@yale.edu",tas.get(1).getEmail());
+    }
+    @Test
+    public void testOfficeHours() {
+        assertEquals("Jane Doe",csData.getOfficeHours().get("2_3").get());
+        assertEquals("Jane Doe",csData.getOfficeHours().get("2_4").get());
+        assertEquals("Joe Shmo",csData.getOfficeHours().get("3_1").get());
+        assertEquals("Joe Shmo",csData.getOfficeHours().get("3_2").get());
+        assertEquals("Jane Doe",csData.getOfficeHours().get("4_5").get());
+        assertEquals("Jane Doe",csData.getOfficeHours().get("4_6").get());
+        assertEquals("Jane Doe",csData.getOfficeHours().get("4_7").get());
+        assertEquals("Joe Shmo",csData.getOfficeHours().get("5_1").get());
+        assertEquals("Joe Shmo",csData.getOfficeHours().get("5_2").get());
+        assertEquals("Jane Doe",csData.getOfficeHours().get("6_7").get());
+        assertEquals("Jane Doe",csData.getOfficeHours().get("6_8").get());
+    }
+    @Test
+    public void testRecitations() {
+        ObservableList<Recitation> recitations = csData.getRecitations();
+        assertEquals("R02",csData.getRecitations().get(0).getSection());
+        assertEquals("Mckenna",csData.getRecitations().get(0).getInstructor());
+        assertEquals("Wed 3:30pm-4:23pm",csData.getRecitations().get(0).getDayTime());
+        assertEquals("Old CS 2114",csData.getRecitations().get(0).getLocation());
+        assertEquals("Jane Doe",csData.getRecitations().get(0).getTA1());
+        assertEquals("Joe Shmo",csData.getRecitations().get(0).getTA2());
+        
+        assertEquals("R05",csData.getRecitations().get(1).getSection());
+        assertEquals("Banerjee",csData.getRecitations().get(1).getInstructor());
+        assertEquals("Tues 5:30pm-6:23pm",csData.getRecitations().get(1).getDayTime());
+        assertEquals("Old CS 2114",csData.getRecitations().get(1).getLocation());
+        assertEquals("",csData.getRecitations().get(1).getTA1());
+        assertEquals("",csData.getRecitations().get(1).getTA2());
+    }
+    @Test
+    public void testStartingManday() {
+        assertEquals("2017-01-23",csData.getStartingMonday());        
+    }
+    @Test
+    public void testEndingFriday() {
+        assertEquals("2017-05-19",csData.getEndingFriday());
+    }
+    @Test
+    public void testScheduleItems() {
+        assertEquals("Holiday",csData.getScheduleItems().get(0).getType());
+        assertEquals("2/9/2017",csData.getScheduleItems().get(0).getDate());
+        assertEquals("SNOW DAY",csData.getScheduleItems().get(0).getTitle());
+        assertEquals("",csData.getScheduleItems().get(0).getTopic());
+        assertEquals("http://funnybizblog.com",csData.getScheduleItems().get(0).getLink());
+        assertEquals("",csData.getScheduleItems().get(0).getTime());
+        assertEquals("",csData.getScheduleItems().get(0).getCriteria());
+        
+        assertEquals("Lecture",csData.getScheduleItems().get(1).getType());
+        assertEquals("2/14/2017",csData.getScheduleItems().get(1).getDate());
+        assertEquals("Lecture 3",csData.getScheduleItems().get(1).getTitle());
+        assertEquals("Event Programming",csData.getScheduleItems().get(1).getTopic());
+        assertEquals("",csData.getScheduleItems().get(1).getLink());
+        assertEquals("",csData.getScheduleItems().get(1).getTime());
+        assertEquals("",csData.getScheduleItems().get(1).getCriteria());
+        
+        assertEquals("Holiday",csData.getScheduleItems().get(2).getType());
+        assertEquals("3/13/2017",csData.getScheduleItems().get(2).getDate());
+        assertEquals("Spring Break",csData.getScheduleItems().get(2).getTitle());
+        assertEquals("",csData.getScheduleItems().get(2).getTopic());
+        assertEquals("",csData.getScheduleItems().get(2).getLink());
+        assertEquals("",csData.getScheduleItems().get(2).getTime());
+        assertEquals("",csData.getScheduleItems().get(2).getCriteria());
+        
+        assertEquals("HW",csData.getScheduleItems().get(3).getType());
+        assertEquals("3/27/2017",csData.getScheduleItems().get(3).getDate());
+        assertEquals("HW3",csData.getScheduleItems().get(3).getTitle());
+        assertEquals("UML",csData.getScheduleItems().get(3).getTopic());
+        assertEquals("",csData.getScheduleItems().get(3).getLink());
+        assertEquals("11:59pm",csData.getScheduleItems().get(3).getTime());
+        assertEquals("",csData.getScheduleItems().get(3).getCriteria());
+    }
+    @Test
+    public void testTeams() {
+        assertEquals("Atomic Comics",csData.getTeams().get(0).getName());
+        assertEquals("#552211ff",csData.getTeams().get(0).getColor());
+        assertEquals("#ffffffff",csData.getTeams().get(0).getTextColor());
+        assertEquals("http://atomicomic.com",csData.getTeams().get(0).getLink());
+        
+        assertEquals("C4 Comics",csData.getTeams().get(1).getName());
+        assertEquals("#235399ff",csData.getTeams().get(1).getColor());
+        assertEquals("#ffffffff",csData.getTeams().get(1).getTextColor());
+        assertEquals("http://c4-comics.appspot.com",csData.getTeams().get(1).getLink());
+    }
+    @Test
+    public void testStudents() {
+        assertEquals("Beau",csData.getStudents().get(0).getFirstName());
+        assertEquals("Brummell",csData.getStudents().get(0).getLastName());
+        assertEquals("Atomic Comics",csData.getStudents().get(0).getTeam());
+        assertEquals("Lead Designer",csData.getStudents().get(0).getRole());
+        
+        assertEquals("Jane",csData.getStudents().get(1).getFirstName());
+        assertEquals("Doe",csData.getStudents().get(1).getLastName());
+        assertEquals("C4 Comics",csData.getStudents().get(1).getTeam());
+        assertEquals("Lead Programmer",csData.getStudents().get(1).getRole());
+        
+        assertEquals("Noonian",csData.getStudents().get(2).getFirstName());
+        assertEquals("Soong",csData.getStudents().get(2).getLastName());
+        assertEquals("Atomic Comics",csData.getStudents().get(2).getTeam());
+        assertEquals("Data Designer",csData.getStudents().get(2).getRole());
     }
 }
