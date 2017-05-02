@@ -88,7 +88,7 @@ public class CSGeneratorAppTest {
             }
             //System.out.println(csData.getOfficeHours());
             csFiles = new CSFiles(csgenerator);
-            csFiles.loadData(csData, "./work/hardcode2.json");
+            csFiles.loadData(csData, "./work/SiteSaveTest.json");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -264,13 +264,13 @@ public class CSGeneratorAppTest {
     @Test
     public void testTeams() {
         assertEquals("Atomic Comics",csData.getTeams().get(0).getName());
-        assertEquals("#552211ff",csData.getTeams().get(0).getColor());
-        assertEquals("#ffffffff",csData.getTeams().get(0).getTextColor());
+        assertEquals("0x552211ff",csData.getTeams().get(0).getColor());
+        assertEquals("0xffffffff",csData.getTeams().get(0).getTextColor());
         assertEquals("http://atomicomic.com",csData.getTeams().get(0).getLink());
         
         assertEquals("C4 Comics",csData.getTeams().get(1).getName());
-        assertEquals("#235399ff",csData.getTeams().get(1).getColor());
-        assertEquals("#ffffffff",csData.getTeams().get(1).getTextColor());
+        assertEquals("0x235399ff",csData.getTeams().get(1).getColor());
+        assertEquals("0xffffffff",csData.getTeams().get(1).getTextColor());
         assertEquals("http://c4-comics.appspot.com",csData.getTeams().get(1).getLink());
     }
     @Test

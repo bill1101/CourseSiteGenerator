@@ -9,16 +9,20 @@ import csg.CSGeneratorApp;
 import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.Recitation;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,6 +34,9 @@ import properties_manager.PropertiesManager;
  */
 public class RecitationWorkspace {
     CSGeneratorApp app;
+    RecitationController controller;
+
+    
     Tab recitationTab;
     
     VBox recitationContent;
@@ -64,9 +71,18 @@ public class RecitationWorkspace {
     
     Button recitationAddEditButton;
     Button recitationClear;
-            
+    ObservableList<String> options_TA;
+    boolean isAdd;
+    String initSection;
+    String initInstructor;
+    String initDayTime;
+    String initLocation;
+    String initTA1;
+    String initTA2;
     public RecitationWorkspace(CSGeneratorApp initApp){
+        isAdd = true;
         app = initApp;
+        controller = new RecitationController(app);
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
         recitationTab = new Tab();
@@ -78,6 +94,7 @@ public class RecitationWorkspace {
         recitationHeaderPane = new HBox(20);
         recitationHeaderPane.getChildren().addAll(recitationHeader,recitationDeleteButton);    
         recitationsTable = new TableView();
+        recitationsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         CSData data = (CSData) app.getDataComponent();
         ObservableList<Recitation> tableData = data.getRecitations();
         recitationsTable.setItems(tableData);
@@ -115,9 +132,10 @@ public class RecitationWorkspace {
         locationLabel = new Label(props.getProperty(CSGeneratorProp.LOCATION_TEXT.toString()));
         locationTextField = new TextField();
         TA1Label = new Label(props.getProperty(CSGeneratorProp.TA1_TEXT.toString()));
-        TA1ComboBox = new ComboBox();
+        options_TA = FXCollections.observableArrayList();
+        TA1ComboBox = new ComboBox(options_TA);       
         TA2Label = new Label(props.getProperty(CSGeneratorProp.TA2_TEXT.toString()));
-        TA2ComboBox = new ComboBox();
+        TA2ComboBox = new ComboBox(options_TA);
         recitationAddEditButton = new Button(props.getProperty(CSGeneratorProp.RECITATION_ADD_EDIT_BUTTON_TEXT.toString()));
         recitationClear = new Button(props.getProperty(CSGeneratorProp.RECITATION_CLEAR_BUTTON_TEXT.toString()));
         recitationAddEditPane.add(recitationAddEditHeader, 0, 0);
@@ -142,6 +160,68 @@ public class RecitationWorkspace {
         recitationContent.setStyle("-fx-padding: 20;");
         recitationContent.getChildren().addAll(recitationHeaderPane,recitationsTable,recitationAddEditPane);
         recitationTab.setContent(recitationContent);
+        
+        recitationsTable.setOnKeyPressed(e -> {
+            controller.handleKeyPress(e.getCode());
+        });
+        recitationDeleteButton.setOnAction(e -> {
+            controller.handleDeleteRecitation();
+        });
+        recitationContent.setOnKeyPressed(e -> {
+            controller.handleKeyPress(e);
+        });
+        recitationAddEditButton.setOnAction(e -> {
+            if(isAdd){
+                controller.handleAddRecitation();
+            }
+            else{
+                controller.handleEditRecitation(initSection,initInstructor,initDayTime,initLocation,initTA1,initTA2);
+                isAdd = true;
+                recitationsTable.refresh();
+                recitationAddEditButton.setText(props.getProperty(CSGeneratorProp.RECITATION_ADD_EDIT_BUTTON_TEXT.toString()));
+            }
+        });
+        recitationClear.setOnAction(e -> {
+            sectionTextField.setText("");
+            instructorTextField.setText("");
+            dayTimeTextField.setText("");
+            locationTextField.setText("");
+            TA1ComboBox.setValue("");
+            TA2ComboBox.setValue("");
+            isAdd = true;
+            recitationAddEditButton.setText(props.getProperty(CSGeneratorProp.RECITATION_ADD_EDIT_BUTTON_TEXT.toString()));
+        });
+        recitationsTable.setRowFactory(event -> {
+            TableRow<Recitation> row = new TableRow<>();
+            row.setOnMouseClicked(e -> {
+                if (! row.isEmpty() && e.getButton()== MouseButton.PRIMARY) {
+                    Recitation clickedRow = row.getItem();
+                    sectionTextField.setText(clickedRow.getSection());
+                    instructorTextField.setText(clickedRow.getInstructor());
+                    dayTimeTextField.setText(clickedRow.getDayTime());
+                    locationTextField.setText(clickedRow.getLocation());
+                    TA1ComboBox.setValue(clickedRow.getTA1());
+                    TA2ComboBox.setValue(clickedRow.getTA2());
+                    recitationAddEditButton.setText(props.getProperty(CSGeneratorProp.UPDATE_BUTTON_TEXT.toString()));
+                    isAdd = false;                   
+                    initSection = clickedRow.getSection();
+                    initInstructor = clickedRow.getInstructor();
+                    initDayTime = clickedRow.getDayTime();
+                    initLocation = clickedRow.getLocation();
+                    initTA1 = clickedRow.getTA1();
+                    initTA2 = clickedRow.getTA2();
+                }
+            });
+            return row ;
+        });
+    }
+
+    public ObservableList<String> getOptions_TA() {
+        return options_TA;
+    }
+
+    public void setOptions_TA(ObservableList<String> options_TA) {
+        this.options_TA = options_TA;
     }
 
     public Tab getRecitationTab() {
@@ -372,5 +452,11 @@ public class RecitationWorkspace {
         this.recitationClear = recitationClear;
     }
     
-    
+    public RecitationController getController() {
+        return controller;
+    }
+
+    public void setController(RecitationController controller) {
+        this.controller = controller;
+    }
 }

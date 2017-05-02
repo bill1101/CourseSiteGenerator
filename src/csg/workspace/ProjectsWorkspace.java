@@ -10,19 +10,24 @@ import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.Student;
 import csg.data.Team;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import properties_manager.PropertiesManager;
 
 /**
@@ -32,7 +37,7 @@ import properties_manager.PropertiesManager;
 public class ProjectsWorkspace {
     CSGeneratorApp app;
     Tab projectsTab;
-    
+    ProjectController controller;
     Label projectsHeader;
     
     VBox teamsPane;
@@ -81,10 +86,25 @@ public class ProjectsWorkspace {
         
     VBox projectsContent;
     
+    boolean isAdd;
+    String initName;
+    String initColor;
+    String initTextColor;
+    String initLink;
+    
+    boolean studentIsAdd;
+    String initFirstName;
+    String initLastName;
+    String initTeam;
+    String initRole;
+    
+    ObservableList<String> options_team;
     public ProjectsWorkspace(CSGeneratorApp initApp) {
         app = initApp;
+        isAdd = true;
+        studentIsAdd = true;
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        
+        controller = new ProjectController(app);
         projectsTab = new Tab();
         projectsTab.setText(props.getProperty(CSGeneratorProp.TAB_TITLE_PROJECT_DATA.toString()));
         projectsTab.setClosable(false);
@@ -96,6 +116,7 @@ public class ProjectsWorkspace {
         teamsHeaderPane = new HBox(20);
         teamsHeaderPane.getChildren().addAll(teamsHeaderLabel,removeTeamsButton);
         teamsTable = new TableView<>();
+        teamsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         CSData data = (CSData) app.getDataComponent();
         ObservableList<Team> tableData = data.getTeams();
         teamsTable.setItems(tableData);
@@ -142,11 +163,13 @@ public class ProjectsWorkspace {
         teamsPane = new VBox(8);
         teamsPane.getChildren().addAll(teamsHeaderPane,teamsTable,teamsAddEditPane);
 
+              
         studentsHeaderLabel = new Label(props.getProperty(CSGeneratorProp.STUDENTS_HEADER.toString()));
         removeStudentsButton = new Button(props.getProperty(CSGeneratorProp.REMOVE_STUDENTS_BUTTON_TEXT.toString()));
         studentsHeaderPane = new HBox(20);
         studentsHeaderPane.getChildren().addAll(studentsHeaderLabel,removeStudentsButton);
         studentsTable = new TableView();
+        studentsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         studentsTable.setMaxHeight(150);
         ObservableList<Student> tableData1 = data.getStudents();
         studentsTable.setItems(tableData1);
@@ -169,7 +192,8 @@ public class ProjectsWorkspace {
         lastNameLabel = new Label(props.getProperty(CSGeneratorProp.LASTNAME_LABEL.toString()));
         lastNameTextField = new TextField();
         teamLabel = new Label(props.getProperty(CSGeneratorProp.TEAM_LABEL.toString()));
-        teamComboBox = new ComboBox();
+        options_team = FXCollections.observableArrayList();
+        teamComboBox = new ComboBox(options_team);
         roleLabel = new Label(props.getProperty(CSGeneratorProp.ROLE_LABEL.toString()));
         roleTextField = new TextField();
         studentsAddEditButton = new Button(props.getProperty(CSGeneratorProp.STUDENT_ADD_BUTTON_TEXT.toString()));
@@ -193,8 +217,127 @@ public class ProjectsWorkspace {
         projectsContent.getChildren().addAll(projectsHeader, teamsPane, studentsPane);
         projectsContent.setStyle("-fx-padding: 20;");
         projectsTab.setContent(projectsContent);
+        
+        teamsTable.setOnKeyPressed(e -> {
+            controller.handleKeyPress(e.getCode());
+        });
+        removeTeamsButton.setOnAction(e -> {
+            controller.handleDeleteTeam();
+        });
+        projectsContent.setOnKeyPressed(e -> {
+            controller.handleKeyPress(e);
+        });
+        
+        teamsAddEditButton.setOnAction(e -> {
+            if(isAdd){
+                controller.handleAddTeam();
+            }
+            else{
+                controller.handleEditTeam(initName, initColor, initTextColor, initLink);
+                isAdd = true;
+                teamsTable.refresh();
+                teamsAddEditButton.setText(props.getProperty(CSGeneratorProp.RECITATION_ADD_EDIT_BUTTON_TEXT.toString()));
+            }
+        });      
+          
+        teamsClearButton.setOnAction(e -> {
+            nameTextField.setText("");
+            colorPicker.setValue(Color.WHITE);
+            textColorPicker.setValue(Color.WHITE);
+            linkTextField.setText("");
+            isAdd = true;
+            teamsAddEditButton.setText(props.getProperty(CSGeneratorProp.RECITATION_ADD_EDIT_BUTTON_TEXT.toString()));
+        });
+        
+        teamsTable.setRowFactory(event -> {
+            TableRow<Team> row = new TableRow<>();
+            row.setOnMouseClicked(e -> {
+                if (! row.isEmpty() && e.getButton()== MouseButton.PRIMARY) {
+                    Team clickedRow = row.getItem();
+                    nameTextField.setText(clickedRow.getName());
+                    colorPicker.setValue(Color.web(clickedRow.getColor()));
+                    textColorPicker.setValue(Color.web(clickedRow.getTextColor()));
+                    linkTextField.setText(clickedRow.getLink());
+                    
+                    teamsAddEditButton.setText(props.getProperty(CSGeneratorProp.UPDATE_BUTTON_TEXT.toString()));
+                    isAdd = false;                   
+                    initName = clickedRow.getName();
+                    initColor = clickedRow.getColor();
+                    initTextColor = clickedRow.getTextColor();
+                    initLink = clickedRow.getLink();
+                }
+            });
+            return row ;
+        });
+        
+        studentsTable.setOnKeyPressed(e -> {
+            controller.handleKeyPressStudents(e.getCode());
+        });
+        
+        removeStudentsButton.setOnAction(e -> {
+            controller.handleDeleteStudent();
+        });
+        
+        studentsTable.setRowFactory(event -> {
+            TableRow<Student> row = new TableRow<>();
+            row.setOnMouseClicked(e -> {
+                if (! row.isEmpty() && e.getButton()== MouseButton.PRIMARY) {
+                    Student clickedRow = row.getItem();
+                    
+                    firstNameTextField.setText(clickedRow.getFirstName());
+                    lastNameTextField.setText(clickedRow.getLastName());
+                    teamComboBox.setValue(clickedRow.getTeam());
+                    roleTextField.setText(clickedRow.getRole());
+                    
+                    studentsAddEditButton.setText(props.getProperty(CSGeneratorProp.UPDATE_BUTTON_TEXT.toString()));
+                    studentIsAdd = false;                   
+                    initFirstName = clickedRow.getFirstName();
+                    initLastName = clickedRow.getLastName();
+                    initTeam = clickedRow.getTeam();
+                    initRole = clickedRow.getRole();
+                }
+            });
+            return row ;
+        });
+        
+        studentsAddEditButton.setOnAction(e -> {
+            if(studentIsAdd){
+                controller.handleAddStudent();
+            }
+            else{
+                controller.handleEditStudent(initFirstName, initLastName, initTeam, initRole);
+                studentIsAdd = true;
+                studentsTable.refresh();
+                studentsAddEditButton.setText(props.getProperty(CSGeneratorProp.STUDENT_ADD_BUTTON_TEXT.toString()));
+            }
+        });
+        
+        studentsClear.setOnAction(e ->{
+            firstNameTextField.setText("");
+            lastNameTextField.setText("");
+            teamComboBox.setValue("");
+            roleTextField.setText("");
+            studentIsAdd = true;
+            studentsAddEditButton.setText(props.getProperty(CSGeneratorProp.STUDENT_ADD_BUTTON_TEXT.toString()));
+        });
     }
 
+    public ProjectController getController() {
+        return controller;
+    }
+
+    public void setController(ProjectController controller) {
+        this.controller = controller;
+    }
+
+    public ObservableList<String> getOptions_team() {
+        return options_team;
+    }
+
+    public void setOptions_team(ObservableList<String> options_team) {
+        this.options_team = options_team;
+    }
+    
     public Tab getProjectsTab() {
         return projectsTab;
     }

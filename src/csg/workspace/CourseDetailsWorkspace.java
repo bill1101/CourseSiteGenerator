@@ -15,6 +15,7 @@ import static djf.settings.AppStartupConstants.PATH_IMAGES;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -173,8 +174,14 @@ public class CourseDetailsWorkspace {
         sitePagesTable.setItems(tableData);
         sitePagesTable.getColumns();
         useColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.USE_COLUMN_TEXT.toString()));
+//        useColumn.setCellValueFactory(param -> param.getValue().isUse());
+//        useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));
         useColumn.setCellValueFactory(param -> param.getValue().isUse());
-        useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));   
+        useColumn.setCellFactory(i -> {
+            CheckBoxTableCell<SitePage, Boolean> checkBoxCell = new CheckBoxTableCell<>();
+            return checkBoxCell;
+        });
+        
         navbarTitleColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.NAVBAR_TITLE_COLUMN_TEXT.toString()));
         navbarTitleColumn.setCellValueFactory(new PropertyValueFactory<SitePage, String>("navBarTitle"));
         fileNameColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.FILE_NAME_COLUMN_TEXT.toString()));

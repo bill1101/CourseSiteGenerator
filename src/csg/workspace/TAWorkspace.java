@@ -395,10 +395,7 @@ public class TAWorkspace {
             }
             else{
                 controller.handleEditTA(updateName, updateEmail);
-                taTable.refresh();
-                //for (Pane p : officeHoursGridTACellPanes.values()) {
-                //    controller.handleCellEdit(p);
-                //}
+                isAdd = true;
                 addButton.setText(addButtonText);
             }
         });

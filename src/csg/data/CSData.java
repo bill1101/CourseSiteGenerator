@@ -451,7 +451,7 @@ public class CSData implements AppDataComponent{
 
         // ADD THE TA
         if (!containsTA(initName, initEmail)) {
-            teachingAssistants.add(ta);
+            teachingAssistants.add(ta);            
         }
 
         // SORT THE TAS
@@ -543,6 +543,145 @@ public class CSData implements AppDataComponent{
         }
     }
     
+    public boolean containsRecitation(String section) {
+        for(Recitation recitation: recitations){
+            if(recitation.getSection().equals(section)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void addRecitation(String section, String instructor, String dayTime, String location, String ta1, String ta2) {
+        Recitation recitation = new Recitation(section,instructor,dayTime,location,ta1,ta2);
+        if(!containsRecitation(section)){
+            recitations.add(recitation);
+        }
+        Collections.sort(recitations);
+    }
+
+    public void removeRecitation(String section) {
+        for(Recitation recitation: recitations){
+            if(recitation.getSection().equals(section)){
+                recitations.remove(recitation);
+                return;
+            }
+        }
+    }
+    
+    public void editRecitation(String initSection, String section, String instructor, String dayTime, String location, String TA1, String TA2) {
+        Recitation recitation = getRecitation(initSection);
+        if(recitation!=null){
+            recitation.setSection(section);
+            recitation.setInstructor(instructor);
+            recitation.setDayTime(dayTime);
+            recitation.setLocation(location);
+            recitation.setTA1(TA1);
+            recitation.setTA2(TA2);
+        }
+        
+        Collections.sort(recitations);
+    }
+    
+    private Recitation getRecitation(String initSection) {
+        for(Recitation recitation:recitations){
+            if(recitation.getSection().equals(initSection))
+                return recitation;
+        }
+        return null;
+    }
+    
+    public boolean containsTeam(String name) {
+        for(Team team: teams){
+            if(team.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void addTeam(String name, String color, String textColor, String link) {
+        Team team = new Team(name,color,textColor,link);
+        if(!containsTeam(name)){
+            teams.add(team);
+            
+        }
+        Collections.sort(teams);
+    }
+
+    public void removeTeam(String name) {
+        for(Team team:teams){
+            if(team.getName().equals(name)){
+                teams.remove(team);
+                return;
+            }
+        }
+    }
+      
+    public void editTeam(String initName, String name, String color, String textColor, String link) {
+        Team team = getTeam(initName);
+        if(team != null){
+            team.setName(name);
+            team.setColor(color);
+            team.setTextColor(textColor);
+            team.setLink(link);
+        }      
+        Collections.sort(teams);        
+    }
+    
+    private Team getTeam(String initName) {
+        for(Team team:teams){
+            if(team.getName().equals(initName)){
+                return team;
+            }
+        }
+        return null;
+    }
+    
+    public boolean containsStudent(String firstName,String lastName) {
+        for(Student student: students){
+            if(student.getFirstName().equals(firstName) && student.getLastName().equals(lastName))
+                return true;
+        }
+        return false;
+    }
+  
+    public void addStudent(String firstName, String lastName, String team, String role) {
+        Student student = new Student(firstName,lastName,team,role);
+        if(!containsStudent(firstName,lastName)){
+            students.add(student);
+        }
+        Collections.sort(students);
+    }
+
+    public void removeStudent(String firstName, String lastName) {
+        for(Student student:students){
+            if(student.getFirstName().equals(firstName) && student.getLastName().equals(lastName)){
+                students.remove(student);
+                return;
+            }
+        }
+    }
+
+    public void editStudent(String initFirstName, String initLastName, String firstName, String lastName, String team, String role) {
+        Student student = getStudent(initFirstName, initLastName);
+        if(student != null){
+            student.setFirstName(firstName);
+            student.setLastName(lastName);
+            student.setTeam(team);
+            student.setRole(role);
+        }
+        Collections.sort(students);
+    }
+
+    public Student getStudent(String firstName, String lastName){
+        for(Student student: students){
+            if(student.getFirstName().equals(firstName) && student.getLastName().equals(lastName)){
+                return student;
+            }
+        }
+        return null;
+    }
     ///recitation
     public ObservableList<Recitation> getRecitations() {
         return recitations;
@@ -591,6 +730,6 @@ public class CSData implements AppDataComponent{
     public void setStudents(ObservableList<Student> students) {
         this.students = students;
     }
-    
-    
+
+
 }

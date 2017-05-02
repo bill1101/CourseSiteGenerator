@@ -124,14 +124,14 @@
         <property name="LOCATION_COLUMN_TEXT"           value="Location"></property>
         <property name="TA1_COLUMN_TEXT"                value="TA1"></property>
         <property name="TA2_COLUMN_TEXT"                value="TA2"></property>
-        <property name="RECITATION_ADD_EDIT_HEADER_TEXT"    value="Add/Edit"></property>
+        <property name="RECITATION_ADD_EDIT_HEADER_TEXT"    value="Add"></property>
         <property name="SECTION_TEXT"                   value="Section:"></property>
         <property name="INSTRUCTOR_TEXT"                value="Instructor:"></property>
         <property name="DAY_TIME_TEXT"                  value="Day/Time:"></property>
         <property name="LOCATION_TEXT"                  value="Location:"></property>
         <property name="TA1_TEXT"                       value="Supervising TA:"></property>
         <property name="TA2_TEXT"                       value="Supervising TA:"></property>
-        <property name="RECITATION_ADD_EDIT_BUTTON_TEXT"    value="Add/Update"></property>
+        <property name="RECITATION_ADD_EDIT_BUTTON_TEXT"    value="Add"></property>
         <property name="RECITATION_CLEAR_BUTTON_TEXT"   value="Clear"></property>
         <property name="START_TIME"                     value="Start Time"></property>
         <property name="END_TIME"                     value="End Time"></property>
@@ -164,7 +164,7 @@
         <property name="COLOR_COLUMN_TEXT"              value="Color (hex#)"></property>
         <property name="TEXT_COLOR_COLUMN_TEXT"         value="Text COlor(hex#)"></property>
         <property name="LINK_COLUMN_TEXT"               value="Link"></property>
-        <property name="TEAMS_ADD_EDIT_HEADER"          value="Add/EDit"></property>
+        <property name="TEAMS_ADD_EDIT_HEADER"          value="Add/Edit"></property>
         <property name="NAME_TEXT"                      value="Name:"></property>
         <property name="COLOR_TEXT"                     value="Color:"></property>
         <property name="TEXT_COLOR_TEXT"                value="Texte Color:"></property>
@@ -199,8 +199,45 @@
         <property name="START_END_TIME_INVALID_MESSAGE"     value="Start time must before end time"></property>
         <property name="CHANGE_TIME_WARNING_TITLE"          value="Warning!"></property>
         <property name="CHANGE_TIME_WARNING_MESSAGE"          value="This action may delete information. Are you sure?"></property>
-    </property_list>
-    <property_options_list>
+        
+        <property name="MISSING_RECITATION_SECTION_TITLE"     value="Missing recitation section"></property>
+        <property name="MISSING_RECITATION_SECTION_MESSAGE"   value="You must provide a recitation section"></property>
+        <property name="MISSING_RECITATION_INSTRUCTOR_TITLE"  value="Missing recitation instructor"></property>
+        <property name="MISSING_RECITATION_INSTRUCTOR_MESSAGE"  value="You must provide a recitation instructor"></property>
+        <property name="MISSING_RECITATION_DAYTIME_TITLE"                value="Missing recitation dayTime"></property>
+        <property name="MISSING_RECITATION_DAYTIME_MESSAGE"                value="You must provide a recitation dayTime"></property>
+        <property name="MISSING_RECITATION_LOCATION_TITLE"               value="Missing recitation location"></property>
+        <property name="MISSING_RECITATION_LOCATION_MESSAGE"               value="You must provide a recitation location"></property>
+        <property name="MISSING_RECITATION_TA1_TITLE"                    value="Missing recitation ta1"></property>
+        <property name="MISSING_RECITATION_TA1_MESSAGE"                    value="You must provide a recitation ta1"></property>
+        <property name="MISSING_RECITATION_TA2_TITLE"                    value="Missing recitation ta2"></property>
+        <property name="MISSING_RECITATION_TA2_MESSAGE"                    value="You must provide a recitation ta2"></property>
+        <property name="RECITATION_NOT_UNIQUE_TITLE"           value="Recitation Not Unique"></property>     
+        <property name="RECITATION_NOT_UNIQUE_MESSAGE"         value="You must provide a unique Recitation"></property>   
+        
+        <property name="MISSING_TEAM_NAME_TITLE"            value="Missing team name"></property>
+        <property name="MISSING_TEAM_NAME_MESSAGE"          value="You must provide a team name"></property>
+        <property name="MISSING_TEAM_COLOR_TITLE"           value="Missing team color"></property>
+        <property name="MISSING_TEAM_COLOR_MESSAGE"         value="You must provide a team color"></property>
+        <property name="MISSING_TEAM_TEXTCOLOR_TITLE"       value="Missing team textColor"></property>
+        <property name="MISSING_TEAM_TEXTCOLOR_MESSAGE"     value="You must provide a team text color"></property>
+        <property name="MISSING_TEAM_LINK_TITLE"            value="Missing team link"></property>
+        <property name="MISSING_TEAM_LINK_MESSAGE"          value="You must provide a team link"></property>
+        <property name="TEAM_NOT_UNIQUE_TITLE"              value="Team not unique"></property>
+        <property name="TEAM_NOT_UNIQUE_MESSAGE"            value="You must provide a unique team name"></property>
+    
+        <property name="MISSING_STUDENT_FIRSTNAME_TITLE"    value="Missing first name"></property>
+        <property name="MISSING_STUDENT_FIRSTNAME_MESSAGE"  value="You must provide a student first name"></property>
+        <property name="MISSING_STUDENT_LASTNAME_TITLE"     value="Missing last name"></property>
+        <property name="MISSING_STUDENT_LASTNAME_MESSAGE"   value="You must provide a student last name"></property>
+        <property name="MISSING_STUDENT_TEAM_TITLE"         value="Missing team"></property>
+        <property name="MISSING_STUDENT_TEAM_MESSAGE"       value="You must provide a team"></property>
+        <property name="MISSING_STUDENT_ROLE_TITLE"         value="Missing role"></property>
+        <property name="MISSING_STUDENT_ROLE_MESSAGE"       value="You must provide a role"></property>
+        <property name="STUDENT_NOT_UNIQUE_TITLE"           value="Student not unique"></property>
+        <property name="STUDENT_NOT_UNIQUE_MESSAGE"         value="You must provide a unique name"></property>
+        </property_list>
+        <property_options_list>
         <property_options name="OFFICE_HOURS_TABLE_HEADERS">
             <option>Start Time</option>
             <option>End Time</option>

@@ -80,7 +80,7 @@ public class TestSave{
         csData.getOfficeHours().put("6_8", new SimpleStringProperty("Jane Doe"));
         hardCodeData(csData);
         CSFiles csFiles = new CSFiles(csgenerator);
-        csFiles.saveData(csData, "./work/hardcode2.json");     
+        csFiles.saveData(csData, "./work/SiteSaveTest.json");     
     }
 
     public static void hardCodeData(AppDataComponent appData){
@@ -119,8 +119,8 @@ public class TestSave{
         data.getScheduleItems().add(new ScheduleItem("Holiday","3/13/2017","Spring Break","","","",""));
         data.getScheduleItems().add(new ScheduleItem("HW","3/27/2017","HW3","UML","","11:59pm",""));
         
-        data.getTeams().add(new Team("Atomic Comics","#552211ff","#ffffffff","http://atomicomic.com"));
-        data.getTeams().add(new Team("C4 Comics","#235399ff","#ffffffff","http://c4-comics.appspot.com"));
+        data.getTeams().add(new Team("Atomic Comics","0x552211ff","0xffffffff","http://atomicomic.com"));
+        data.getTeams().add(new Team("C4 Comics","0x235399ff","0xffffffff","http://c4-comics.appspot.com"));
         
         data.getStudents().add(new Student("Beau","Brummell","Atomic Comics","Lead Designer"));
         data.getStudents().add(new Student("Jane","Doe","C4 Comics","Lead Programmer"));

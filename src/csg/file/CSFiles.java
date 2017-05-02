@@ -13,6 +13,7 @@ import csg.data.SitePage;
 import csg.data.Student;
 import csg.data.TeachingAssistant;
 import csg.data.Team;
+import csg.workspace.CSWorkspace;
 import djf.components.AppDataComponent;
 import djf.components.AppFileComponent;
 import static djf.settings.AppStartupConstants.PATH_DATA;
@@ -309,6 +310,7 @@ public class CSFiles implements AppFileComponent {
         
         
         // NOW LOAD ALL THE UNDERGRAD TAs
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().clear();
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
         for (int i = 0; i < jsonTAArray.size(); i++) {
             JsonObject jsonTA = jsonTAArray.getJsonObject(i);
@@ -316,6 +318,7 @@ public class CSFiles implements AppFileComponent {
             String name = jsonTA.getString(JSON_NAME);
             String email = jsonTA.getString(JSON_EMAIL);
             dataManager.addTA(undergrad,name, email);
+            ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add(name);
         }
         if(app.getWorkspaceComponent() != null){
             dataManager.initHours(startHour, endHour);
@@ -358,6 +361,7 @@ public class CSFiles implements AppFileComponent {
             dataManager.getScheduleItems().add(new ScheduleItem(type,date,title,topic,link,time,criteria));
         }
         
+        ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().clear();
         JsonArray jsonTeamsArray = json.getJsonArray(JSON_TEAMS);
         for(int i = 0; i < jsonTeamsArray.size(); i++) {
             JsonObject jsonTeamItem = jsonTeamsArray.getJsonObject(i);
@@ -366,6 +370,7 @@ public class CSFiles implements AppFileComponent {
             String text_color = jsonTeamItem.getString(JSON_TEXT_COLOR);
             String link = jsonTeamItem.getString(JSON_LINK);
             dataManager.getTeams().add(new Team(name,color,text_color,link));
+            ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().add(name);
         }
         
         JsonArray jsonStudentsArray = json.getJsonArray(JSON_STUDENTS);
@@ -685,8 +690,9 @@ public class CSFiles implements AppFileComponent {
         JsonArrayBuilder teamArrayBuilder = Json.createArrayBuilder();
         ObservableList<Team> teams = dataManager.getTeams();
         for (Team team : teams) {
+            //System.out.println(team.getColor());
             JsonObject teamJson = Json.createObjectBuilder()
-                    .add(JSON_TEAM_NAME, team.getName())
+                    .add(JSON_TEAM_NAME, team.getName())                
                     .add(JSON_COLOR, "#"+team.getColor().substring(2, team.getColor().length()-2))
                     .add(JSON_TEXT_COLOR, "#"+team.getTextColor().substring(2, team.getTextColor().length()-2)).build();
             teamArrayBuilder.add(teamJson);

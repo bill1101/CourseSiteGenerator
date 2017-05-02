@@ -11,6 +11,7 @@ import csg.data.CSData;
 import csg.data.ScheduleItem;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -33,6 +34,7 @@ import properties_manager.PropertiesManager;
  */
 public class ScheduleWorkspace {
     CSGeneratorApp app;
+    ScheduleController controller;
     Tab scheduleTab;
 
     HBox scheduleHeaderPane;
@@ -81,7 +83,7 @@ public class ScheduleWorkspace {
         app = initApp;
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         CSData data = (CSData)initApp.getDataComponent();
-        
+        controller = new ScheduleController(app);
         scheduleTab = new Tab();
         scheduleTab.setText(props.getProperty(CSGeneratorProp.TAB_TITLE_SCHEDULE_DATA.toString()));
         scheduleTab.setClosable(false);
@@ -94,13 +96,16 @@ public class ScheduleWorkspace {
         calendarBoundariesHeader = new Label(props.getProperty(CSGeneratorProp.CALENDAR_BOUNDARIES_HEADER.toString()));
         startingMondayLabel = new Label(props.getProperty(CSGeneratorProp.STARTING_MONDAY_LABEL.toString()));
         startingMondayDatePicker = new DatePicker();
-        //startingMondayDatePicker.setValue(LocalDate.parse(data.getStartingMonday()));
+        startingMondayDatePicker.setEditable(true);
         startingMondayDatePicker.setOnAction(e->{
-            System.out.println(startingMondayDatePicker.getValue());
+            controller.handleEditStarting();
         });
         endingFridayLabel = new Label(props.getProperty(CSGeneratorProp.ENDING_FRIDAY_LABEL.toString()));
         endingFridayDatePicker = new DatePicker();
-        //endingFridayDatePicker.setValue(LocalDate.parse(data.getEndingFriday()));
+        endingFridayDatePicker.setEditable(true);
+        endingFridayDatePicker.setOnAction(e->{
+            controller.handleEditEnding();
+        });
         calendarBoundariesDate = new HBox(20);
         calendarBoundariesDate.getChildren().addAll(startingMondayLabel,startingMondayDatePicker,endingFridayLabel,endingFridayDatePicker);
         calendarBoundariesPane = new VBox(8);
@@ -111,7 +116,7 @@ public class ScheduleWorkspace {
         scheduleItemsHeader = new Label(props.getProperty(CSGeneratorProp.SCHEDULE_ITEMS_HEADER.toString()));
         removeSchedule = new Button(props.getProperty(CSGeneratorProp.REMOVE_SCHEDULE_BUTTON_TEXT.toString()));
         scheduleItemsHeaderPane = new HBox(20);
-        scheduleItemsHeaderPane.getChildren().addAll(scheduleItemsHeader,removeSchedule);       
+        scheduleItemsHeaderPane.getChildren().addAll(scheduleItemsHeader,removeSchedule);        
         scheduleItemsTable = new TableView<>();
         scheduleItemsTable .getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         //CSData data = (CSData) app.getDataComponent();        
@@ -133,7 +138,15 @@ public class ScheduleWorkspace {
                
         scheduleItemsAddEditHeader = new Label(props.getProperty(CSGeneratorProp.SCHEDULE_ITEMS_ADD_EDIT_HEADER.toString()));
         typeLabel = new Label(props.getProperty(CSGeneratorProp.TYPE_LABEL.toString()));
-        typeComboBox = new ComboBox();
+        ObservableList<String> options_type = 
+            FXCollections.observableArrayList(
+                "Holiday",
+                "Lecture",
+                "HW",
+                "Reference",
+                "Recitation"              
+            );
+        typeComboBox = new ComboBox(options_type);
         dateLabel = new Label(props.getProperty(CSGeneratorProp.DATE_LABEL.toString()));
         dateDatePicker = new DatePicker();
         timeLabel = new Label(props.getProperty(CSGeneratorProp.TIME_TEXT.toString()));
@@ -173,7 +186,9 @@ public class ScheduleWorkspace {
         scheduleContent.getChildren().addAll(scheduleHeaderPane,calendarBoundariesPane,scheduleItemsPane);
         scheduleTab.setContent(scheduleContent);
         
-        
+        scheduleContent.setOnKeyPressed(e -> {
+            controller.handleKeyPress(e);
+        });
     }
 
     public Tab getScheduleTab() {
@@ -495,4 +510,12 @@ public class ScheduleWorkspace {
         }
     }
        
+    
+    public ScheduleController getController() {
+        return controller;
+    }
+
+    public void setController(ScheduleController controller) {
+        this.controller = controller;
+    }
 }
