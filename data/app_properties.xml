@@ -146,7 +146,7 @@
         <property name="DATE_COLUMN_TEXT"               value="Date"></property>
         <property name="TITLE_COLUMN_TEXT"              value="Title"></property>
         <property name="TOPIC_COLUMN_TEXT"              value="Topic"></property>
-        <property name="SCHEDULE_ITEMS_ADD_EDIT_HEADER"     value="AddEdit"></property>
+        <property name="SCHEDULE_ITEMS_ADD_EDIT_HEADER"     value="Add"></property>
         <property name="TYPE_LABEL"                     value="Type:"></property>
         <property name="DATE_LABEL"                     value="Date:"></property>
         <property name="TIME_TEXT"                      value="Time:"></property>
@@ -204,16 +204,33 @@
         <property name="MISSING_RECITATION_SECTION_MESSAGE"   value="You must provide a recitation section"></property>
         <property name="MISSING_RECITATION_INSTRUCTOR_TITLE"  value="Missing recitation instructor"></property>
         <property name="MISSING_RECITATION_INSTRUCTOR_MESSAGE"  value="You must provide a recitation instructor"></property>
-        <property name="MISSING_RECITATION_DAYTIME_TITLE"                value="Missing recitation dayTime"></property>
-        <property name="MISSING_RECITATION_DAYTIME_MESSAGE"                value="You must provide a recitation dayTime"></property>
-        <property name="MISSING_RECITATION_LOCATION_TITLE"               value="Missing recitation location"></property>
-        <property name="MISSING_RECITATION_LOCATION_MESSAGE"               value="You must provide a recitation location"></property>
-        <property name="MISSING_RECITATION_TA1_TITLE"                    value="Missing recitation ta1"></property>
-        <property name="MISSING_RECITATION_TA1_MESSAGE"                    value="You must provide a recitation ta1"></property>
-        <property name="MISSING_RECITATION_TA2_TITLE"                    value="Missing recitation ta2"></property>
-        <property name="MISSING_RECITATION_TA2_MESSAGE"                    value="You must provide a recitation ta2"></property>
+        <property name="MISSING_RECITATION_DAYTIME_TITLE"       value="Missing recitation dayTime"></property>
+        <property name="MISSING_RECITATION_DAYTIME_MESSAGE"     value="You must provide a recitation dayTime"></property>
+        <property name="MISSING_RECITATION_LOCATION_TITLE"      value="Missing recitation location"></property>
+        <property name="MISSING_RECITATION_LOCATION_MESSAGE"    value="You must provide a recitation location"></property>
+        <property name="MISSING_RECITATION_TA1_TITLE"           value="Missing recitation ta1"></property>
+        <property name="MISSING_RECITATION_TA1_MESSAGE"         value="You must provide a recitation ta1"></property>
+        <property name="MISSING_RECITATION_TA2_TITLE"           value="Missing recitation ta2"></property>
+        <property name="MISSING_RECITATION_TA2_MESSAGE"         value="You must provide a recitation ta2"></property>
         <property name="RECITATION_NOT_UNIQUE_TITLE"           value="Recitation Not Unique"></property>     
         <property name="RECITATION_NOT_UNIQUE_MESSAGE"         value="You must provide a unique Recitation"></property>   
+        
+        <property name="MISSING_SCHEDULE_TYPE_TITLE"         value="Missing schedule type"></property>
+        <property name="MISSING_SCHEDULE_TYPE_MESSAGE"       value="You must provide a schedule type"></property>
+        <property name="MISSING_SCHEDULE_DATE_TITLE"         value="Missing schedule date"></property>
+        <property name="MISSING_SCHEDULE_DATE_MESSAGE"       value="You must provide a schedule date"></property>
+        <property name="MISSING_SCHEDULE_TIME_TITLE"         value="Missing schedule time"></property>
+        <property name="MISSING_SCHEDULE_TIME_MESSAGE"       value="You must provide a schedule time"></property>
+        <property name="MISSING_SCHEDULE_TITLE_TITLE"        value="Missing schedule title"></property>
+        <property name="MISSING_SCHEDULE_TITLE_MESSAGE"      value="You must provide a schedule title"></property>
+        <property name="MISSING_SCHEDULE_TOPIC_TITLE"        value="Missing schedule topic"></property>
+        <property name="MISSING_SCHEDULE_TOPIC_MESSAGE"      value="You must provide a schedule topic"></property>
+        <property name="MISSING_SCHEDULE_LINK_TITLE"         value="Missing schedule link"></property>
+        <property name="MISSING_SCHEDULE_LINK_MESSAGE"       value="You must provide a schedule link"></property>
+        <property name="MISSING_SCHEDULE_CRITERIA_TITLE"     value="Missing schedule criteria"></property>
+        <property name="MISSING_SCHEDULE_CRITERIA_MESSAGE"   value="You must provide a schedule criteria"></property>
+        <property name="SCHEDULE_NOT_UNIQUE_TITLE"           value="Schedule Not Unique"></property>
+        <property name="SCHEDULE_NOT_UNIQUE_MESSAGE"         value="You must provide a unique schedule"></property>
         
         <property name="MISSING_TEAM_NAME_TITLE"            value="Missing team name"></property>
         <property name="MISSING_TEAM_NAME_MESSAGE"          value="You must provide a team name"></property>

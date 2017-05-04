@@ -591,6 +591,55 @@ public class CSData implements AppDataComponent{
         return null;
     }
     
+    public boolean containsSchedule(String type, String date) {
+        for(ScheduleItem si: scheduleItems){
+            if(si.getType().equals(type) && si.getDate().equals(date)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addSchedule(String type, String date, String time, String title, String topic, String link, String criteria) {
+        ScheduleItem si = new ScheduleItem(type,date,time,title,topic,link,criteria);
+        if(!containsSchedule(type,date)){
+            scheduleItems.add(si);
+        }
+        Collections.sort(scheduleItems);
+    }
+
+    public void removeSchedule(String type, String date){
+        for(ScheduleItem si: scheduleItems){
+            if(si.getType().equals(type) && si.getDate().equals(date)){
+                scheduleItems.remove(si);
+                return;
+            }
+        }
+    }
+        
+    public void editSchedule(String initType, String initDate, String type, String date, String time, String title, String topic, String link, String criteria) {
+        ScheduleItem si = getScheduleItem(initType, initDate);
+        if(si != null){           
+            si.setType(type);
+            si.setDate(date);
+            si.setTime(time);
+            si.setTitle(title);
+            si.setTopic(topic);
+            si.setLink(link);
+            si.setCriteria(criteria);
+        }
+        Collections.sort(scheduleItems);
+    }
+    
+    public ScheduleItem getScheduleItem(String initType, String initDate){
+        for(ScheduleItem si: scheduleItems){
+            if(si.getType().equals(initType) && si.getDate().equals(initDate)){
+                return si;
+            }
+        }
+        return null;
+    }
+    
     public boolean containsTeam(String name) {
         for(Team team: teams){
             if(team.getName().equals(name)){

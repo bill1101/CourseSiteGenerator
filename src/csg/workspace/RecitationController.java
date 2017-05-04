@@ -10,6 +10,7 @@ import static csg.CSGeneratorProp.*;
 import csg.data.CSData;
 import csg.data.Recitation;
 import csg.jtps.AddRecitation_Transaction;
+import csg.jtps.EditRecitation;
 import csg.jtps.RemoveRecitation_Transaction;
 import csg.jtps.jTPS_Transaction;
 import djf.ui.AppGUI;

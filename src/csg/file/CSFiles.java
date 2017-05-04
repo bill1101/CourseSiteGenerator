@@ -358,7 +358,7 @@ public class CSFiles implements AppFileComponent {
             String link = jsonScheduleItem.getString(JSON_LINK);
             String time = jsonScheduleItem.getString(JSON_TIME);
             String criteria = jsonScheduleItem.getString(JSON_CRITERIA);
-            dataManager.getScheduleItems().add(new ScheduleItem(type,date,title,topic,link,time,criteria));
+            dataManager.getScheduleItems().add(new ScheduleItem(type,date,time,title,topic,link,criteria));
         }
         
         ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().clear();

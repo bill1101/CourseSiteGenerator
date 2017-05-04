@@ -9,6 +9,8 @@ import csg.CSGeneratorApp;
 import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.ScheduleItem;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
@@ -20,9 +22,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -79,8 +83,19 @@ public class ScheduleWorkspace {
     Button scheduleClear;
     
     VBox scheduleContent;
+    
+    boolean isAdd;
+    String initType;
+    String initDate;
+    String initTime;
+    String initTitle;
+    String initTopic;
+    String initLink;
+    String initCriteria;
+    
     public ScheduleWorkspace(CSGeneratorApp initApp) {
         app = initApp;
+        isAdd = true;
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         CSData data = (CSData)initApp.getDataComponent();
         controller = new ScheduleController(app);
@@ -188,6 +203,65 @@ public class ScheduleWorkspace {
         
         scheduleContent.setOnKeyPressed(e -> {
             controller.handleKeyPress(e);
+        });
+        
+        scheduleItemsTable.setOnKeyPressed(e -> {
+            controller.handleKeyPress(e.getCode());
+        });
+        
+        scheduleItemsTable.setRowFactory(event -> {
+            TableRow<ScheduleItem> row = new TableRow<>();
+            row.setOnMouseClicked(e -> {
+                if (! row.isEmpty() && e.getButton()== MouseButton.PRIMARY) {
+                    ScheduleItem clickedRow = row.getItem();
+                    
+                    typeComboBox.setValue(clickedRow.getType());
+                    String[] tempDate = clickedRow.getDate().split("/");
+                    if(Integer.parseInt(tempDate[0])<10){
+                        tempDate[0] = "0"+tempDate[0];
+                    }
+                    if(Integer.parseInt(tempDate[1])<10){
+                        tempDate[1] = "0"+tempDate[1];
+                    }
+                    String date = tempDate[2] + "-" + tempDate[0] + "-" + tempDate[1];
+                    dateDatePicker.setValue(LocalDate.parse(date));
+                    timeTextField.setText(clickedRow.getTime());
+                    titleTextField.setText(clickedRow.getTitle());
+                    topicTextField.setText(clickedRow.getTopic());
+                    linkTextField.setText(clickedRow.getLink());
+                    criteriaTextField.setText(clickedRow.getCriteria());
+                    
+                    scheduleAddEditButton.setText(props.getProperty(CSGeneratorProp.UPDATE_BUTTON_TEXT.toString()));
+                    isAdd = false;                   
+                    initType = clickedRow.getType();
+                    initDate = clickedRow.getDate();
+                    initTime = clickedRow.getTime();
+                    initTitle = clickedRow.getTitle();
+                    initTopic = clickedRow.getTopic();
+                    initLink = clickedRow.getLink();
+                    initCriteria = clickedRow.getCriteria();
+                }
+            });
+            return row ;
+        });
+                
+        removeSchedule.setOnAction(e -> {
+            controller.handleDeleteSchedule();
+        });
+        scheduleAddEditButton.setOnAction(e -> {
+            if(isAdd){
+                controller.handleAddSchedule();
+            }
+            else{
+                controller.handleEditRecitation(initType,initDate,initTime,initTitle,initTopic,initLink,initCriteria);
+                isAdd = true;
+                scheduleItemsTable.refresh();
+                scheduleAddEditButton.setText(props.getProperty(CSGeneratorProp.SCHEDULE_ITEMS_ADD_EDIT_BUTTON_TEXT.toString()));
+            }
+        });
+        
+        scheduleClear.setOnAction(e -> {
+        
         });
     }
 

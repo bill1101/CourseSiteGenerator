@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package csg.workspace;
+package csg.jtps;
 
 import csg.CSGeneratorApp;
 import csg.data.CSData;
 import csg.jtps.jTPS_Transaction;
+import csg.workspace.CSWorkspace;
 
 /**
  *

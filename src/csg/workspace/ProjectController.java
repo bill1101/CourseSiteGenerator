@@ -290,7 +290,7 @@ public class ProjectController {
         }else if(role.isEmpty()){
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(MISSING_STUDENT_ROLE_TITLE), props.getProperty(MISSING_STUDENT_ROLE_MESSAGE));
-        }else if((!firstName.equals(firstName) || !lastName.equals(lastName)) && data.containsStudent(firstName,lastName)){
+        }else if((!firstName.equals(initFirstName) || !lastName.equals(initLastName)) && data.containsStudent(firstName,lastName)){
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(STUDENT_NOT_UNIQUE_TITLE), props.getProperty(STUDENT_NOT_UNIQUE_MESSAGE));
         }else{

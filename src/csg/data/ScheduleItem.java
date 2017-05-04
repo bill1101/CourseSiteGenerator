@@ -22,7 +22,7 @@ public class ScheduleItem<E extends Comparable<E>> implements Comparable<E> {
     private final StringProperty time;
     private final StringProperty criteria;
 
-    public ScheduleItem(String type, String date, String title, String topic, String link,String time,String criteria) {
+    public ScheduleItem(String type, String date ,String time, String title, String topic, String link, String criteria) {
         this.type = new SimpleStringProperty(type);
         this.date = new SimpleStringProperty(date);
         this.title = new SimpleStringProperty(title);
