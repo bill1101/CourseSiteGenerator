@@ -7,6 +7,7 @@ package csg.jtps;
 
 import csg.data.CSData;
 import csg.CSGeneratorApp;
+import csg.workspace.CSWorkspace;
 /**
  *
  * @author tyx
@@ -25,12 +26,14 @@ public class AddTA_Transaction implements jTPS_Transaction {
     public void doTransaction() {
         CSData data = (CSData)app.getDataComponent();
         data.addTA(name, email);
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add(name);
     }
 
     @Override
     public void undoTransaction() {
         CSData data = (CSData)app.getDataComponent();
         data.removeTA(name);
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().remove(name);
     }
     
 }

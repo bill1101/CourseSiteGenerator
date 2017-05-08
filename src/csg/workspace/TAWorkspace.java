@@ -649,6 +649,7 @@ public class TAWorkspace {
             });
             p.setOnMouseClicked(e -> {
                 controller.handleCellToggle((Pane) e.getSource());
+                taTable.requestFocus();
             });
             p.setOnMouseExited(e -> {
                 controller.handleGridCellMouseExited((Pane) e.getSource());
@@ -714,6 +715,7 @@ public class TAWorkspace {
             });
             p.setOnMouseClicked(e -> {
                 controller.handleCellToggle((Pane) e.getSource());
+                taTable.requestFocus();
             });
             p.setOnMouseExited(e -> {
                 controller.handleGridCellMouseExited((Pane) e.getSource());
@@ -788,6 +790,7 @@ public class TAWorkspace {
             });
             p.setOnMouseClicked(e -> {
                 controller.handleCellToggle((Pane) e.getSource());
+                taTable.requestFocus();
             });
             p.setOnMouseExited(e -> {
                 controller.handleGridCellMouseExited((Pane) e.getSource());

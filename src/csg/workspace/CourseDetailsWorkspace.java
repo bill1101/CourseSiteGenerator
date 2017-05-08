@@ -10,8 +10,15 @@ import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.SitePage;
 import csg.style.CSStyle;
+import properties_manager.PropertiesManager;
+import static djf.settings.AppPropertyType.EXPORT_ERROR_MESSAGE;
+import static djf.settings.AppPropertyType.EXPORT_ERROR_TITLE;
 import static djf.settings.AppStartupConstants.FILE_PROTOCOL;
+import static djf.settings.AppStartupConstants.PATH_HTML;
 import static djf.settings.AppStartupConstants.PATH_IMAGES;
+import djf.ui.AppGUI;
+import djf.ui.AppMessageDialogSingleton;
+import java.io.File;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -35,6 +42,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 
@@ -116,22 +125,38 @@ public class CourseDetailsWorkspace {
         courseInfoPane.add(courseIndoHeader, 0, 0);
         subjectLabel = new Label(props.getProperty(CSGeneratorProp.SUBJECT_TEXT.toString()));
         courseInfoPane.add(subjectLabel, 0, 1);
-        subjectComboBox = new ComboBox();
+        ObservableList<String> options_subject = 
+            FXCollections.observableArrayList(
+                "CSE","ISE","MAT"
+            );
+        subjectComboBox = new ComboBox(options_subject);
         courseInfoPane.add(subjectComboBox, 1, 1);
         blank = new Label("        ");
         courseInfoPane.add(blank, 2, 1);
         numberLabel = new Label(props.getProperty(CSGeneratorProp.NUMBER_TEXT.toString()));
         courseInfoPane.add(numberLabel, 3, 1);
-        numberComboBox = new ComboBox();
+        ObservableList<String> options_number = 
+            FXCollections.observableArrayList(
+                "219","308","380"
+            );
+        numberComboBox = new ComboBox(options_number);
         courseInfoPane.add(numberComboBox, 4, 1);
         
         semesterLabel = new Label(props.getProperty(CSGeneratorProp.SEMESTER_TEXT.toString()));
         courseInfoPane.add(semesterLabel, 0, 2);
-        semesterComboBox = new ComboBox();
+        ObservableList<String> options_semester = 
+            FXCollections.observableArrayList(
+                "Spring","Summer","Fall"
+            );
+        semesterComboBox = new ComboBox(options_semester);
         courseInfoPane.add(semesterComboBox, 1, 2);
         yearLabel = new Label(props.getProperty(CSGeneratorProp.YEAR_TEXT.toString()));
         courseInfoPane.add(yearLabel, 3, 2);
-        yearComboBox = new ComboBox();
+        ObservableList<String> options_year = 
+            FXCollections.observableArrayList(
+                "2017","2018","2019","2020"
+            );
+        yearComboBox = new ComboBox(options_year);
         courseInfoPane.add(yearComboBox, 4, 2);
         
         titleLabel = new Label(props.getProperty(CSGeneratorProp.TITLE_TEXT.toString()));
@@ -177,10 +202,11 @@ public class CourseDetailsWorkspace {
 //        useColumn.setCellValueFactory(param -> param.getValue().isUse());
 //        useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));
         useColumn.setCellValueFactory(param -> param.getValue().isUse());
-        useColumn.setCellFactory(i -> {
-            CheckBoxTableCell<SitePage, Boolean> checkBoxCell = new CheckBoxTableCell<>();
-            return checkBoxCell;
-        });
+//        useColumn.setCellFactory(i -> {
+//            CheckBoxTableCell<SitePage, Boolean> checkBoxCell = new CheckBoxTableCell<>();
+//            return checkBoxCell;
+//        });
+        useColumn.setCellFactory(CheckBoxTableCell.forTableColumn(useColumn));
         
         navbarTitleColumn = new TableColumn<>(props.getProperty(CSGeneratorProp.NAVBAR_TITLE_COLUMN_TEXT.toString()));
         navbarTitleColumn.setCellValueFactory(new PropertyValueFactory<SitePage, String>("navBarTitle"));
@@ -217,7 +243,12 @@ public class CourseDetailsWorkspace {
         rightFooterImage = new ImageView();
         changeRighrFooterImageButton = new Button(props.getProperty(CSGeneratorProp.RIGHE_FOOTER_IMAGE_BUTTON_TEXT.toString()));
         stylesheetLabel = new Label(props.getProperty(CSGeneratorProp.STYLESHEET_TEXT.toString()));
-        stylesheetComboBox = new ComboBox();
+        ObservableList<String> options_style = 
+            FXCollections.observableArrayList(
+                "sea_wolf.css",
+                "sea_wolf2.css"
+            );
+        stylesheetComboBox = new ComboBox(options_style);
         pageStyleNoteLabel = new Label(props.getProperty(CSGeneratorProp.PAGE_STYLE_NOTE_TEXT.toString()));
         //pageStylePositionPane.getChildren().add(pageStylePane);
         
@@ -246,8 +277,133 @@ public class CourseDetailsWorkspace {
         //CSStyle csStyle = (CSStyle)app.getStyleComponent();
         //csStyle.initCourseDetailsWorkspaceStyle();
         
+        
+        
+        subjectComboBox.setOnAction(e -> {
+            data.setSubject(subjectComboBox.getValue().toString());
+            markWorkAsEdited();
+        });
+        
+        numberComboBox.setOnAction(e -> {
+            data.setNumber(numberComboBox.getValue().toString());
+            markWorkAsEdited();
+        });
+        
+        semesterComboBox.setOnAction(e -> {
+            data.setSemester(semesterComboBox.getValue().toString());
+            markWorkAsEdited();
+        });
+        
+        yearComboBox.setOnAction(e -> {
+            data.setYear(yearComboBox.getValue().toString());
+            markWorkAsEdited();
+        });
+        
+        titleTextField.setOnKeyReleased(e -> {
+            data.setTitle(titleTextField.getText());
+            markWorkAsEdited();
+        });
+        
+        instructorNameTextField.setOnKeyReleased(e -> {
+            data.setInstructorName(instructorNameTextField.getText());
+            markWorkAsEdited();
+        });
+        
+        instructorHomeTextField.setOnKeyReleased(e -> {
+            data.setInstructorHome(instructorHomeTextField.getText());
+            markWorkAsEdited();
+        });
+        
+        exportDirChangeButton.setOnAction(e -> {
+            try{
+                DirectoryChooser dc = new DirectoryChooser();
+                File destination = dc.showDialog(app.getGUI().getWindow());
+                data.setExportDir(destination.getAbsolutePath());
+                exportDirContent.setText(destination.getAbsolutePath());
+                markWorkAsEdited();
+            } catch (Exception ioe) {
+                //ioe.printStackTrace();
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(EXPORT_ERROR_TITLE), props.getProperty(EXPORT_ERROR_MESSAGE));
+            }
+        });
+        
+        selectTemplateButton.setOnAction(e -> {
+            try{
+                DirectoryChooser dc = new DirectoryChooser();
+                File destination = dc.showDialog(app.getGUI().getWindow());
+                if(destination.getAbsolutePath().endsWith("CSE219") || 
+                        destination.getAbsolutePath().endsWith("CSE308") ||
+                        destination.getAbsolutePath().endsWith("CSE380")){
+                    data.setTemplateDir(destination.getAbsolutePath());
+                    data.getSitePages().clear();
+                    data.getSitePages().add(new SitePage(true,"Home","index.html","HomeBuilder.js"));
+                    data.getSitePages().add(new SitePage(true,"Syllabus","syllabus.html","SyllabusBuilder.js"));
+                    data.getSitePages().add(new SitePage(true,"Schedule","schedule.html","ScheduleBuilder.js"));
+                    data.getSitePages().add(new SitePage(true,"HWs","hws.html","HWsBuilder.js"));
+                    data.getSitePages().add(new SitePage(true,"Projects","projects.html","ProjectsBuilder.js"));
+                    selectTemplateContent.setText(destination.getAbsolutePath());
+                    markWorkAsEdited();
+                }else{
+                    throw new Exception();
+                }
+            } catch (Exception ioe) {
+                //ioe.printStackTrace();
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(EXPORT_ERROR_TITLE), props.getProperty(EXPORT_ERROR_MESSAGE));
+            }
+        });
+        
+        changeBannerSchoolImageButton.setOnAction(e -> {
+            FileChooser fc = new FileChooser();
+            File destination = fc.showOpenDialog(app.getGUI().getWindow());
+            if(destination.getAbsolutePath().endsWith("png") || destination.getAbsolutePath().endsWith("jpg")){
+                data.setBannerSchoolImage(destination.getAbsolutePath());
+                Image bannerImage = new Image(FILE_PROTOCOL + data.getBannerSchoolImage(),250,30,false,false);
+                bannerSchoolImage.setImage(bannerImage);
+                markWorkAsEdited();
+            }else{
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show("wrong image", "Image must be under images folder with png extension.");
+            }
+        });
+        
+        changeLeftFooterImageButton.setOnAction(e -> {
+            FileChooser fc = new FileChooser();
+            File destination = fc.showOpenDialog(app.getGUI().getWindow());
+            if(destination.getAbsolutePath().endsWith("png") || destination.getAbsolutePath().endsWith("jpg")){
+                //System.out.println(destination.getAbsolutePath());
+                data.setLeftFooterImage(destination.getAbsolutePath());
+                Image leftImage = new Image(FILE_PROTOCOL + data.getLeftFooterImage(),250,30,false,false);
+                leftFooterImage.setImage(leftImage);
+                markWorkAsEdited();
+            }else{
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show("wrong image", "Image must be under images folder with png extension.");
+            }
+        });
+        
+        changeRighrFooterImageButton.setOnAction(e -> {
+            FileChooser fc = new FileChooser();
+            File destination = fc.showOpenDialog(app.getGUI().getWindow());
+            if(destination.getAbsolutePath().endsWith("png") || destination.getAbsolutePath().endsWith("jpg")){
+                //System.out.println(destination.getAbsolutePath());
+                data.setRightFooterImage(destination.getAbsolutePath());
+                Image rightImage = new Image(FILE_PROTOCOL + data.getRightFooterImage(),250,30,false,false);
+                rightFooterImage.setImage(rightImage);
+                markWorkAsEdited();
+            }else{
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show("wrong image", "Image must be under images folder with png extension.");
+            }
+        });
+        
+        stylesheetComboBox.setOnAction(e -> {
+            data.setStyleSheet(stylesheetComboBox.getValue().toString());
+            markWorkAsEdited();
+        });
     }
-    void reloadWorkspace(CSData data) {
+    public void reloadWorkspace(CSData data) {
         //System.out.println(data);
         subjectComboBox.setValue(data.getSubject());
         numberComboBox.setValue(data.getNumber());
@@ -258,13 +414,22 @@ public class CourseDetailsWorkspace {
         instructorHomeTextField.setText(data.getInstructorHome());
         exportDirContent.setText(data.getExportDir());
         selectTemplateContent.setText(data.getTemplateDir());
-        Image bannerImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getBannerSchoolImage(),250,30,false,false);
+        //Image bannerImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getBannerSchoolImage(),250,30,false,false);
+        Image bannerImage = new Image(FILE_PROTOCOL + data.getBannerSchoolImage(),250,30,false,false);
         bannerSchoolImage.setImage(bannerImage);
-        Image leftImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getLeftFooterImage(),250,30,false,false);
+        //Image leftImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getLeftFooterImage(),250,30,false,false);
+        Image leftImage = new Image(FILE_PROTOCOL + data.getLeftFooterImage(),250,30,false,false);
         leftFooterImage.setImage(leftImage);
-        Image rightImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getRightFooterImage(),250,30,false,false);
+        //Image rightImage = new Image(FILE_PROTOCOL + PATH_IMAGES + data.getRightFooterImage(),250,30,false,false);
+        Image rightImage = new Image(FILE_PROTOCOL  + data.getRightFooterImage(),250,30,false,false);
         rightFooterImage.setImage(rightImage);
         stylesheetComboBox.setValue(data.getStyleSheet());
+    }
+    
+    private void markWorkAsEdited() {
+        // MARK WORK AS EDITED
+        AppGUI gui = app.getGUI();
+        gui.getFileController().markAsEdited(gui);
     }
     
     public SplitPane getSitePagesContainer() {

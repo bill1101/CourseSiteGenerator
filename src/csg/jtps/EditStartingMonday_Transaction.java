@@ -35,6 +35,8 @@ public class EditStartingMonday_Transaction implements jTPS_Transaction {
         ((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getStartingMondayDatePicker().setOnAction(e -> {
             ((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getController().handleEditStarting();
         });
+        ((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getEndingFridayDatePicker()
+                .setDayCellFactory(((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getDayCellFactoryEnding());
     }
 
     @Override
@@ -47,6 +49,8 @@ public class EditStartingMonday_Transaction implements jTPS_Transaction {
         ((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getStartingMondayDatePicker().setOnAction(e -> {
             ((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getController().handleEditStarting();
         });
+        ((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getEndingFridayDatePicker()
+                .setDayCellFactory(((CSWorkspace)app.getWorkspaceComponent()).getScheduleWorkspaceComponent().getDayCellFactoryEnding());
     }
     
 }

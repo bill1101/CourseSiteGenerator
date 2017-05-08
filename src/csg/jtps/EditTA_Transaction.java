@@ -10,7 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import csg.CSGeneratorApp;
 import csg.data.CSData;
+import csg.data.Recitation;
 import csg.workspace.CSWorkspace;
+import java.util.Collections;
 
 /**
  *
@@ -49,6 +51,19 @@ public class EditTA_Transaction implements jTPS_Transaction{
             String cellKey = pane.getId();
             data.replaceTAOfficeHours(cellKey,initName,name);
         }
+        
+        for(Recitation recitation: data.getRecitations()){
+            if(initName.equals(recitation.getTA1())){                
+                recitation.setTA1(name);
+            }else if(initName.equals(recitation.getTA2())){               
+                recitation.setTA2(name);
+            }
+            Collections.sort(data.getRecitations());
+            ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getRecitationsTable().refresh();
+        }
+        
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().remove(initName);
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add(name);
     }
 
     @Override
@@ -57,6 +72,19 @@ public class EditTA_Transaction implements jTPS_Transaction{
         data.editTA(name, initName, initEmail);
         ((CSWorkspace)app.getWorkspaceComponent()).getTAworkspaceComponent().reloadOfficeHoursGrid3(data, officeHoursGridTACellLabels);
         ((CSWorkspace)app.getWorkspaceComponent()).getTAworkspaceComponent().getTATable().refresh();
+        
+        for(Recitation recitation: data.getRecitations()){
+            if(name.equals(recitation.getTA1())){                
+                recitation.setTA1(initName);
+            }else if(name.equals(recitation.getTA2())){               
+                recitation.setTA2(initName);
+            }
+            Collections.sort(data.getRecitations());
+            ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getRecitationsTable().refresh();
+        }
+        
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().remove(name);
+        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add(initName);
     }
     
     

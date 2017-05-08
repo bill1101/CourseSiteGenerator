@@ -124,7 +124,7 @@
         <property name="LOCATION_COLUMN_TEXT"           value="Location"></property>
         <property name="TA1_COLUMN_TEXT"                value="TA1"></property>
         <property name="TA2_COLUMN_TEXT"                value="TA2"></property>
-        <property name="RECITATION_ADD_EDIT_HEADER_TEXT"    value="Add"></property>
+        <property name="RECITATION_ADD_EDIT_HEADER_TEXT"    value="Add/Edit"></property>
         <property name="SECTION_TEXT"                   value="Section:"></property>
         <property name="INSTRUCTOR_TEXT"                value="Instructor:"></property>
         <property name="DAY_TIME_TEXT"                  value="Day/Time:"></property>
@@ -146,7 +146,7 @@
         <property name="DATE_COLUMN_TEXT"               value="Date"></property>
         <property name="TITLE_COLUMN_TEXT"              value="Title"></property>
         <property name="TOPIC_COLUMN_TEXT"              value="Topic"></property>
-        <property name="SCHEDULE_ITEMS_ADD_EDIT_HEADER"     value="Add"></property>
+        <property name="SCHEDULE_ITEMS_ADD_EDIT_HEADER"     value="Add/Edit"></property>
         <property name="TYPE_LABEL"                     value="Type:"></property>
         <property name="DATE_LABEL"                     value="Date:"></property>
         <property name="TIME_TEXT"                      value="Time:"></property>
@@ -154,7 +154,7 @@
         <property name="TOPIC_TEXT"                     value="Topic:"></property>
         <property name="LINK_TEXT"                      value="Link:"></property>
         <property name="CRITERIA_TEXT"                  value="Criteria:"></property>
-        <property name="SCHEDULE_ITEMS_ADD_EDIT_BUTTON_TEXT"    value="AddEdit"></property>
+        <property name="SCHEDULE_ITEMS_ADD_EDIT_BUTTON_TEXT"    value="Add"></property>
         <property name="SCHEDULE_CLEAR_BUTTON_TEXT"     value="Clear"></property>
         
         <property name="PROJECTS_HEADER"                value="Projects"></property>

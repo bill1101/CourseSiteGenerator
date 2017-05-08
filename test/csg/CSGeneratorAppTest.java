@@ -88,7 +88,7 @@ public class CSGeneratorAppTest {
             }
             //System.out.println(csData.getOfficeHours());
             csFiles = new CSFiles(csgenerator);
-            csFiles.loadData(csData, "./work/SiteSaveTest.json");
+            csFiles.loadData(csData, "./work/hardcode.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -124,11 +124,11 @@ public class CSGeneratorAppTest {
     }
     @Test
     public void testExportDir() {
-        assertEquals("..\\..\\Course\\CSE219\\Summer2017\\public",csData.getExportDir());
+        assertEquals("/Users/tyx/Desktop/test2",csData.getExportDir());
     }
     @Test
     public void testTempleate() {
-        assertEquals(".\\templates\\CSE219",csData.getTemplateDir());
+        assertEquals("/Users/tyx/NetBeansProjects/project_csgenerator/CSE219",csData.getTemplateDir());
     }
     @Test
     public void testSitePages() {
@@ -156,19 +156,19 @@ public class CSGeneratorAppTest {
     }
     @Test
     public void testBannerImage() {
-        assertEquals("SBUDarkRedShieldLogo.png",csData.getBannerSchoolImage());
+        assertEquals("/Users/tyx/NetBeansProjects/project_csgenerator/images/SBUDarkRedShieldLogo.png",csData.getBannerSchoolImage());
     }
     @Test
     public void testLeftFooter() {
-        assertEquals("SBUWhiteShieldLogo.jpg",csData.getLeftFooterImage());
+        assertEquals("/Users/tyx/NetBeansProjects/project_csgenerator/images/SBUWhiteShieldLogo.jpg",csData.getLeftFooterImage());
     }
     @Test
     public void testRightFooter() {
-        assertEquals("CSLogo.png",csData.getRightFooterImage());
+        assertEquals("/Users/tyx/NetBeansProjects/project_csgenerator/images/CSLogo.png",csData.getRightFooterImage());
     }
     @Test
     public void testStylesheet() {
-        assertEquals("sea_wolf.css",csData.getStyleSheet());
+        assertEquals("sea_wolf2.css",csData.getStyleSheet());
     }
     @Test
     public void testStartHour() {

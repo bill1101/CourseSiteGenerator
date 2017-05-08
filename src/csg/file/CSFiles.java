@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
-
+import org.apache.commons.io.FileUtils;
 /**
  *
  * @author tyx
@@ -76,8 +77,10 @@ public class CSFiles implements AppFileComponent {
     static final String JSON_TIME = "time";
     static final String JSON_NAME = "name";
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
+    static final String JSON_GRAD_TAS = "grad_tas";
     static final String JSON_EMAIL = "email";
     static final String JSON_UNDERGRAD = "undergrad";
+    static final String JSON_GRAD = "grad";
     
     static final String JSON_RECITATIONS = "recitations";
     static final String JSON_SECTION = "section";
@@ -310,7 +313,10 @@ public class CSFiles implements AppFileComponent {
         
         
         // NOW LOAD ALL THE UNDERGRAD TAs
-        ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().clear();
+        if(app.getWorkspaceComponent() != null){
+            ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().clear();
+            ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add("");
+        }
         JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
         for (int i = 0; i < jsonTAArray.size(); i++) {
             JsonObject jsonTA = jsonTAArray.getJsonObject(i);
@@ -318,7 +324,8 @@ public class CSFiles implements AppFileComponent {
             String name = jsonTA.getString(JSON_NAME);
             String email = jsonTA.getString(JSON_EMAIL);
             dataManager.addTA(undergrad,name, email);
-            ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add(name);
+            if(app.getWorkspaceComponent() != null)
+                ((CSWorkspace)app.getWorkspaceComponent()).getRecitationWorkspaceComponent().getOptions_TA().add(name);
         }
         if(app.getWorkspaceComponent() != null){
             dataManager.initHours(startHour, endHour);
@@ -361,7 +368,8 @@ public class CSFiles implements AppFileComponent {
             dataManager.getScheduleItems().add(new ScheduleItem(type,date,time,title,topic,link,criteria));
         }
         
-        ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().clear();
+        if(app.getWorkspaceComponent() != null)
+            ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().clear();
         JsonArray jsonTeamsArray = json.getJsonArray(JSON_TEAMS);
         for(int i = 0; i < jsonTeamsArray.size(); i++) {
             JsonObject jsonTeamItem = jsonTeamsArray.getJsonObject(i);
@@ -370,7 +378,8 @@ public class CSFiles implements AppFileComponent {
             String text_color = jsonTeamItem.getString(JSON_TEXT_COLOR);
             String link = jsonTeamItem.getString(JSON_LINK);
             dataManager.getTeams().add(new Team(name,color,text_color,link));
-            ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().add(name);
+            if(app.getWorkspaceComponent() != null)
+                ((CSWorkspace)app.getWorkspaceComponent()).getProjectWorkspaceComponent().getOptions_team().add(name);
         }
         
         JsonArray jsonStudentsArray = json.getJsonArray(JSON_STUDENTS);
@@ -398,11 +407,21 @@ public class CSFiles implements AppFileComponent {
     
     @Override
     public void exportData(AppDataComponent data, String filePath) throws IOException {
-        File source = new File(PATH_HTML);
+        //File source = new File(PATH_HTML);
+        File source = new File(((CSData)data).getTemplateDir());
         String s = source.getAbsolutePath();
         File destination = new File(filePath);
+//        System.out.println(source);
+//        System.out.println(destination);
         copyDirectory(source, destination);
-        
+        File banner = new File(filePath + "/public_html/images/SBUDarkRedShieldLogo.png");
+        FileUtils.copyFile(new File(((CSData)data).getBannerSchoolImage()), banner); 
+        File left = new File(filePath + "/public_html/images/SBUWhiteShieldLogo.jpg");
+        FileUtils.copyFile(new File(((CSData)data).getLeftFooterImage()),left);       
+        File right = new File(filePath + "/public_html/images/CSLogo.png");
+        FileUtils.copyFile(new File(((CSData)data).getRightFooterImage()),right);
+        File css = new File(filePath + "/public_html/css/sea_wolf.css");
+        FileUtils.copyFile(new File(s + "/public_html/css/" + ((CSData)data).getStyleSheet()),css);
         String jsonDir = destination.getPath() + "/public_html/js/";
         //Generate CourseInfoData.json
         exportCourseInfoData(data, jsonDir+"CourseInfoData.json");
@@ -456,15 +475,30 @@ public class CSFiles implements AppFileComponent {
         
         JsonArrayBuilder taArrayBuilder = Json.createArrayBuilder();
 	ObservableList<TeachingAssistant> tas = dataManager.getTeachingAssistants();
-	for (TeachingAssistant ta : tas) {	    
-	    JsonObject taJson = Json.createObjectBuilder()		    
-                    .add(JSON_UNDERGRAD, ""+ta.getUndergrad())
-                    .add(JSON_NAME, ta.getName())
-		    .add(JSON_EMAIL, ta.getEmail())
-                    .build();
-	    taArrayBuilder.add(taJson);
+	for (TeachingAssistant ta : tas) {
+            if(ta.getUndergrad() == true){
+                JsonObject taJson = Json.createObjectBuilder()		    
+                        //.add(JSON_UNDERGRAD, ""+ta.getUndergrad())
+                        .add(JSON_NAME, ta.getName())
+                        .add(JSON_EMAIL, ta.getEmail())
+                        .build();
+                taArrayBuilder.add(taJson);
+            }
 	}
 	JsonArray undergradTAsArray = taArrayBuilder.build();
+        
+        JsonArrayBuilder gradTaArrayBuilder = Json.createArrayBuilder();
+	for (TeachingAssistant ta : tas) {
+            if(ta.getUndergrad() == false){
+                JsonObject taJson = Json.createObjectBuilder()		    
+                        //.add(JSON_UNDERGRAD, ""+ta.getUndergrad())
+                        .add(JSON_NAME, ta.getName())
+                        .add(JSON_EMAIL, ta.getEmail())
+                        .build();
+                gradTaArrayBuilder.add(taJson);
+            }
+	}
+	JsonArray gradTAsArray = gradTaArrayBuilder.build();
 
 	// NOW BUILD THE TIME SLOT JSON OBJCTS TO SAVE
 	JsonArrayBuilder timeSlotArrayBuilder = Json.createArrayBuilder();
@@ -482,6 +516,7 @@ public class CSFiles implements AppFileComponent {
                 .add(JSON_START_HOUR, "" + dataManager.getStartHour())
 		.add(JSON_END_HOUR, "" + dataManager.getEndHour())
                 .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
+                .add(JSON_GRAD_TAS, gradTAsArray)
                 .add(JSON_OFFICE_HOURS, timeSlotsArray).build();
         
         Map<String, Object> properties = new HashMap<>(1);

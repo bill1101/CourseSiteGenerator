@@ -9,14 +9,17 @@ import csg.CSGeneratorApp;
 import csg.CSGeneratorProp;
 import csg.data.CSData;
 import csg.data.ScheduleItem;
+import djf.ui.AppMessageDialogSingleton;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -30,6 +33,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 
 /**
@@ -92,7 +96,9 @@ public class ScheduleWorkspace {
     String initTopic;
     String initLink;
     String initCriteria;
-    
+
+    Callback<DatePicker, DateCell> dayCellFactoryStarting;
+    Callback<DatePicker, DateCell> dayCellFactoryEnding;
     public ScheduleWorkspace(CSGeneratorApp initApp) {
         app = initApp;
         isAdd = true;
@@ -111,13 +117,51 @@ public class ScheduleWorkspace {
         calendarBoundariesHeader = new Label(props.getProperty(CSGeneratorProp.CALENDAR_BOUNDARIES_HEADER.toString()));
         startingMondayLabel = new Label(props.getProperty(CSGeneratorProp.STARTING_MONDAY_LABEL.toString()));
         startingMondayDatePicker = new DatePicker();
-        startingMondayDatePicker.setEditable(true);
-        startingMondayDatePicker.setOnAction(e->{
-            controller.handleEditStarting();
-        });
+        startingMondayDatePicker.setEditable(false);
+        startingMondayDatePicker.setValue(LocalDate.parse("2017-01-23"));
+        
+        
         endingFridayLabel = new Label(props.getProperty(CSGeneratorProp.ENDING_FRIDAY_LABEL.toString()));
         endingFridayDatePicker = new DatePicker();
-        endingFridayDatePicker.setEditable(true);
+        endingFridayDatePicker.setEditable(false);
+        endingFridayDatePicker.setValue(LocalDate.parse("2017-05-19"));
+        
+        dayCellFactoryStarting = new Callback<DatePicker, DateCell>(){
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty){
+                    super.updateItem(item, empty);
+                    if(item.isAfter(endingFridayDatePicker.getValue()))
+                        this.setDisable(true);
+                    if(!item.getDayOfWeek().equals(DayOfWeek.MONDAY))
+                        this.setDisable(true);
+                    }           
+                };
+            }
+        };
+        startingMondayDatePicker.setDayCellFactory(dayCellFactoryStarting);
+        
+        dayCellFactoryEnding = new Callback<DatePicker, DateCell>(){
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty){
+                    super.updateItem(item, empty);
+                    if(item.isBefore(startingMondayDatePicker.getValue()))
+                        this.setDisable(true);
+                    if(!item.getDayOfWeek().equals(DayOfWeek.FRIDAY))
+                        this.setDisable(true);
+                    }           
+                };
+            }
+        };
+        endingFridayDatePicker.setDayCellFactory(dayCellFactoryEnding);
+        
+        
+        startingMondayDatePicker.setOnAction(e->{           
+            controller.handleEditStarting();
+        });
         endingFridayDatePicker.setOnAction(e->{
             controller.handleEditEnding();
         });
@@ -261,8 +305,24 @@ public class ScheduleWorkspace {
         });
         
         scheduleClear.setOnAction(e -> {
-        
+            typeComboBox.setValue("");
+            dateDatePicker.setValue(LocalDate.now());
+            timeTextField.setText("");
+            titleTextField.setText("");
+            topicTextField.setText("");
+            linkTextField.setText("");
+            criteriaTextField.setText("");
+            isAdd = true;
+            scheduleAddEditButton.setText(props.getProperty(CSGeneratorProp.SCHEDULE_ITEMS_ADD_EDIT_BUTTON_TEXT.toString()));
         });
+    }
+
+    public Callback<DatePicker, DateCell> getDayCellFactoryStarting() {
+        return dayCellFactoryStarting;
+    }
+
+    public Callback<DatePicker, DateCell> getDayCellFactoryEnding() {
+        return dayCellFactoryEnding;
     }
 
     public Tab getScheduleTab() {

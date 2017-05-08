@@ -583,7 +583,7 @@ public class CSData implements AppDataComponent{
         Collections.sort(recitations);
     }
     
-    private Recitation getRecitation(String initSection) {
+    public Recitation getRecitation(String initSection) {
         for(Recitation recitation:recitations){
             if(recitation.getSection().equals(initSection))
                 return recitation;

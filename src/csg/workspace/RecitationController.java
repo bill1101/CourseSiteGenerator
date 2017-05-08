@@ -71,9 +71,6 @@ public class RecitationController {
         if(section.isEmpty()){
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(MISSING_RECITATION_SECTION_TITLE), props.getProperty(MISSING_RECITATION_SECTION_MESSAGE)); 
-        }else if(instructor.isEmpty()){
-            AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-	    dialog.show(props.getProperty(MISSING_RECITATION_INSTRUCTOR_TITLE), props.getProperty(MISSING_RECITATION_INSTRUCTOR_MESSAGE));
         }else if(dayTime.isEmpty()){
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(MISSING_RECITATION_DAYTIME_TITLE), props.getProperty(MISSING_RECITATION_DAYTIME_MESSAGE));
@@ -106,6 +103,7 @@ public class RecitationController {
     public void handleKeyPress(KeyCode code) {
         if (code == KeyCode.DELETE || code == KeyCode.BACK_SPACE) {
             handleDeleteRecitation();
+            markWorkAsEdited();
         }
     }
     public void handleDeleteRecitation() {
@@ -152,9 +150,6 @@ public class RecitationController {
         if(section.isEmpty()){
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(MISSING_RECITATION_SECTION_TITLE), props.getProperty(MISSING_RECITATION_SECTION_MESSAGE)); 
-        }else if(instructor.isEmpty()){
-            AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-	    dialog.show(props.getProperty(MISSING_RECITATION_INSTRUCTOR_TITLE), props.getProperty(MISSING_RECITATION_INSTRUCTOR_MESSAGE));
         }else if(dayTime.isEmpty()){
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(MISSING_RECITATION_DAYTIME_TITLE), props.getProperty(MISSING_RECITATION_DAYTIME_MESSAGE));

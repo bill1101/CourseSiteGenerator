@@ -104,6 +104,7 @@ public class CSWorkspace extends AppWorkspaceComponent{
     
     @Override
     public void resetWorkspace() {
+        
         // CLEAR OUT THE GRID PANE
         TAworkspaceComponent.officeHoursGridPane.getChildren().clear();
         
@@ -116,6 +117,21 @@ public class CSWorkspace extends AppWorkspaceComponent{
         TAworkspaceComponent.officeHoursGridTimeCellLabels.clear();
         TAworkspaceComponent.officeHoursGridTACellPanes.clear();
         TAworkspaceComponent.officeHoursGridTACellLabels.clear();
+        
+//        courseDetailsWorkspaceComponent.getSubjectComboBox().setValue("");
+//        courseDetailsWorkspaceComponent.getNumberComboBox().setValue("");
+//        courseDetailsWorkspaceComponent.getSemesterComboBox().setValue("");
+//        courseDetailsWorkspaceComponent.getYearComboBox().setValue("");
+//        courseDetailsWorkspaceComponent.getTitleTextField().setText("aa");
+//        System.out.println(courseDetailsWorkspaceComponent.getTitleTextField().getText());
+//        courseDetailsWorkspaceComponent.getInstructorNameTextField().setText("");
+//        courseDetailsWorkspaceComponent.getInstructorHomeTextField().setText("");
+//        courseDetailsWorkspaceComponent.getExportDirContent().setText("");
+//        courseDetailsWorkspaceComponent.getSelectTemplateContent().setText("");
+//        courseDetailsWorkspaceComponent.getBannerSchoolImage().setImage(null);
+//        courseDetailsWorkspaceComponent.getLeftFooterImage().setImage(null);
+//        courseDetailsWorkspaceComponent.getRightFooterImage().setImage(null);
+//        courseDetailsWorkspaceComponent.getStylesheetComboBox().setValue("");
     }
 
     @Override
